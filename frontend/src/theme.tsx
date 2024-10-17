@@ -1,26 +1,69 @@
-import {
-  extendTheme,
-  createMultiStyleConfigHelpers,
-} from "@chakra-ui/react";
+import { extendTheme, createMultiStyleConfigHelpers } from "@chakra-ui/react";
+import { inputAnatomy } from "@chakra-ui/anatomy";
 
-import {
-  defineStyle
-} from "@chakra-ui/styled-system";
+const { definePartsStyle, defineMultiStyleConfig } =
+  createMultiStyleConfigHelpers(inputAnatomy.keys);
 
-export const inputStyle = defineStyle((props) => {
+// default base style from the Input theme
+const baseStyle = definePartsStyle({
+  field: {
+    width: "100%",
+    minWidth: 0,
+    outline: 0,
+    position: "relative",
+    appearance: "none",
+    transitionProperty: "common",
+    transitionDuration: "normal",
+    _disabled: {
+      opacity: 0.4,
+      cursor: "not-allowed",
+    },
+  },
+});
+
+const variantInput = definePartsStyle((props) => {
   return {
     field: {
-      borderColor: "72BF78",
-      // change font family to mono
+      fontFamily: "cursive", // change font family to mono
+      bg: "white",
+      borderColor: "009688",
+      fontsize: "large",
+
+      _focus: {
+        borderColor: "green.500",
+        _dark: {
+          bg: "whiteAlpha.100",
+        },
+      },
+      _hover: {
+        bg: "green.50",
+        borderColor: "009688",
+        _dark: {
+          bg: "whiteAlpha.100",
+        },
+      },
     },
   };
 });
+
 
 const disabledStyles = {
   _disabled: {
     backgroundColor: "ui.light",
   },
+};
+const variants = {
+  outline: variantInput
 }
+const inputTheme = defineMultiStyleConfig({
+  baseStyle,
+  variants,
+  defaultProps: {
+    size: "md",
+    variant: "outline",
+  
+  },
+});
 
 const theme = extendTheme({
   colors: {
@@ -36,6 +79,7 @@ const theme = extendTheme({
     },
   },
   components: {
+    Input:inputTheme,
     Button: {
       variants: {
         primary: {
@@ -60,7 +104,6 @@ const theme = extendTheme({
         },
       },
     },
-
     Tabs: {
       variants: {
         enclosed: {
@@ -79,12 +122,10 @@ const theme = extendTheme({
       body: {
         bg: "antiqueWhite",
         fontFamily: "cursive",
-        fontSize:"large"
+        fontSize: "large",
       },
     }),
   },
 });
 
-
-
-export default theme
+export default theme;
