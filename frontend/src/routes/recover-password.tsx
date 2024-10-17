@@ -76,7 +76,13 @@ function RecoverPassword() {
       gap={4}
       centerContent
     >
-      <Heading size="xl" color="ui.main" textAlign="center" mb={2}>
+      <Heading
+        fontFamily="cursive"
+        size="xl"
+        color="ui.main"
+        textAlign="center"
+        mb={2}
+      >
         Password Recovery
       </Heading>
       <Text align="center">
@@ -84,6 +90,7 @@ function RecoverPassword() {
       </Text>
       <FormControl isInvalid={!!errors.email}>
         <Input
+          
           id="email"
           {...register("email", {
             required: "Email is required",
@@ -100,5 +107,5 @@ function RecoverPassword() {
         Continue
       </Button>
     </Container>
-  )
+  );
 }
