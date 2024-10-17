@@ -22,7 +22,8 @@ import React, { Component } from 'react'
 import Logo from "/assets/images/n_c.png"
 import type { UserPublic } from "../../client"
 import useAuth from "../../hooks/useAuth"
-import SidebarItems from "./SidebarItems"
+
+import { Example } from "../Sidebar/FullSidebar";
 
 const Sidebar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -49,70 +50,9 @@ const Sidebar = () => {
         m={4}
         icon={<FiMenu />}
       />
-      <Drawer isOpen={isOpen} placement="left" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent maxW="250px">
-          <DrawerCloseButton />
-          <DrawerBody py={8}></DrawerBody>
-        </DrawerContent>
-      </Drawer>
-
+      
       {/* Desktop */}
-      <Button ref={btnRef} colorScheme="teal" onClick={onOpen}>
-        Open
-      </Button>
-      <Drawer
-        isOpen={isOpen}
-        placement="right"
-        onClose={onClose}
-        finalFocusRef={btnRef}
-      >
-        <DrawerOverlay />
-        <DrawerContent bg={"#edf2f7"}>
-          <DrawerCloseButton />
-          <DrawerBody>
-            <Flex flexDir="column" justify="space-between">
-              <Box>
-                <Image src={Logo} alt="logo" p={6} />
-                <SidebarItems onClose={onClose} />
-                <Flex
-                  as="button"
-                  onClick={handleLogout}
-                  p={2}
-                  color="ui.danger"
-                  fontWeight="bold"
-                  alignItems="center"
-                >
-                  <FiLogOut />
-                  <Text ml={2}>Log out</Text>
-                </Flex>
-              </Box>
-              {currentUser?.email && (
-                <Text color={textColor} noOfLines={2} fontSize="sm" p={2}>
-                  Logged in as: {currentUser.email}
-                </Text>
-              )}
-            </Flex>
-          </DrawerBody>
-          {currentUser?.email && (
-            <Text
-              color={textColor}
-              noOfLines={2}
-              fontSize="sm"
-              p={2}
-              maxW="180px"
-            >
-              Logged in as: {currentUser.email}
-            </Text>
-          )}
-          <DrawerFooter>
-            <Button variant="outline" mr={3} onClick={onClose}>
-              Cancel
-            </Button>
-            <Button colorScheme="blue">Save</Button>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+
     </>
   );
 }

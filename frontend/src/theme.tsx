@@ -60,6 +60,7 @@ const theme = extendTheme({
         },
       },
     },
+
     Tabs: {
       variants: {
         enclosed: {
@@ -71,13 +72,14 @@ const theme = extendTheme({
         },
       },
     },
-    
-    },
+  },
 
   styles: {
     global: (props) => ({
       body: {
         bg: "antiqueWhite",
+        fontFamily: "cursive",
+        fontSize:"large"
       },
     }),
   },

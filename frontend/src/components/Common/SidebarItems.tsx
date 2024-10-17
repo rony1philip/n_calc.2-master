@@ -41,7 +41,7 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
       color={textColor}
       onClick={onClose}
     >
-      <Icon as={icon} alignSelf="center" />
+      
       <Text fontFamily="cursive" fontSize={"large"} ml={2}>
         {title}
       </Text>

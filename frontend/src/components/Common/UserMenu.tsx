@@ -9,7 +9,7 @@ import {
 import { Link } from "@tanstack/react-router"
 import { FaUserAstronaut } from "react-icons/fa"
 import { FiLogOut, FiUser } from "react-icons/fi"
-
+import SidebarItems from "./SidebarItems";
 import useAuth from "../../hooks/useAuth"
 
 const UserMenu = () => {
@@ -37,7 +37,8 @@ const UserMenu = () => {
             isRound
             data-testid="user-menu"
           />
-          <MenuList>
+          <MenuList fontSize="large" fontFamily="cursive">
+            <SidebarItems></SidebarItems>
             <MenuItem icon={<FiUser fontSize="18px" />} as={Link} to="settings">
               My profile
             </MenuItem>
@@ -53,7 +54,7 @@ const UserMenu = () => {
         </Menu>
       </Box>
     </>
-  )
+  );
 }
 
 export default UserMenu
