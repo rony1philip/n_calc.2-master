@@ -1,26 +1,39 @@
 import {
   Input,
-  Box,
   Container,
-  Text,
   InputGroup,
   InputRightElement,
   Flex,
   Image,
-  Button,
   IconButton,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Box,
+  Button,
+  useDisclosure,
+  Text,
 } from "@chakra-ui/react";
 import { Search2Icon } from "@chakra-ui/icons";
 import { createFileRoute } from "@tanstack/react-router";
 import Logo from "/assets/images/n.png";
 import useAuth from "../../hooks/useAuth";
-
+import RagisterPatientModal from "../../components/Common/Modal";
+import { useRef } from "react";
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
 });
 
+
 function Dashboard() {
   const { user: currentUser } = useAuth();
+    const { isOpen, onOpen, onClose } = useDisclosure();
+    const finalRef = useRef(null);
+
 
   return (
     <>
@@ -56,12 +69,10 @@ function Dashboard() {
               borderColor="#009688"
               justifyContent={"center"}
             >
-              <InputRightElement >
+              <InputRightElement>
                 <IconButton
                   variant="primary"
-                  onClick={() => {
-                    console.log("clicked");
-                  }}
+                  onClick={onOpen}
                   aria-label="Search database"
                   icon={<Search2Icon color="white" />}
                 />
@@ -74,6 +85,37 @@ function Dashboard() {
               />
             </InputGroup>
           </Flex>
+          <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+            <ModalOverlay />
+            <ModalContent>
+              <ModalHeader>Register Patient</ModalHeader>
+              <ModalCloseButton />
+              <ModalBody>
+                <Text>Patient Name</Text>
+                <Input
+                  type="tel"
+                  placeholder="Patient Name"
+                />
+                <Text>Patient Phon Number</Text>
+                <Input
+                  type="tel"
+                  placeholder="Phone number"
+                />
+                <Text>Patient Id</Text>
+                <Input
+                  type="tel"
+                  placeholder="Patient Id"
+                />
+              </ModalBody>
+
+              <ModalFooter>
+                <Button mr={3} onClick={onClose}>
+                  Close
+                </Button>
+                <Button variant="primary">Patient Intake</Button>
+              </ModalFooter>
+            </ModalContent>
+          </Modal>
         </Box>
       </Container>
     </>

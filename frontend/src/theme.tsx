@@ -84,7 +84,8 @@ const theme = extendTheme({
       variants: {
         primary: {
           backgroundColor: "ui.main",
-          color: "ui.light",
+          
+          color: "white",
           _hover: {
             backgroundColor: "#00766C",
           },
