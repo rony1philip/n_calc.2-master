@@ -22,7 +22,7 @@ import { Search2Icon } from "@chakra-ui/icons";
 import { createFileRoute } from "@tanstack/react-router";
 import Logo from "/assets/images/n.png";
 import useAuth from "../../hooks/useAuth";
-import RagisterPatientModal from "../../components/Common/Modal";
+import TableForm from "../../components/Common/TableForm";
 import { useRef } from "react";
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
@@ -117,6 +117,7 @@ function Dashboard() {
             </ModalContent>
           </Modal>
         </Box>
+        <TableForm></TableForm>
       </Container>
     </>
   );

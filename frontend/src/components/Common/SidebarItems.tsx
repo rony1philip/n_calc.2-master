@@ -67,7 +67,7 @@ const SidebarItems = ({ onClose }: SidebarItemsProps) => {
 
   return (
     <>
-      <Box >
+      <Box>
         <Container>
           <Image maxW={200} maxH={200} src={Logo} alt="logo" p={6} />
         </Container>
