@@ -18,6 +18,8 @@ import {
   TableContainer,
   Grid,
   GridItem,
+  Card,
+  Container,
 } from "@chakra-ui/react";
 
 function TableForm() {
@@ -39,8 +41,8 @@ function TableForm() {
         textAlign="center"
         fontWeight="bold"
         fontSize={"large"}
-            fontFamily={"cursive"}
-            padding={"10px"}
+        fontFamily={"cursive"}
+        padding={"10px"}
       >
         {day}
       </Th>
@@ -51,11 +53,13 @@ function TableForm() {
       <Td padding={"8px"} borderColor={"green.200"} justifyContent={"center"}>
         <Center>
           <Textarea
+            boxShadow="md"
+            background={"#FAF7F0"}
             variant="outline"
             width={"80px"}
             borderRadius={"7"}
-            borderColor={"green.50"}
-            border={"2px"}
+            borderColor={"black"}
+            border={"0px"}
             fontSize={"xx-small"}
           ></Textarea>
         </Center>
@@ -69,10 +73,12 @@ function TableForm() {
           <GridItem rowSpan={1} colSpan={1}>
             {mill}
           </GridItem>
-          <GridItem rowSpan={1} colSpan={1}>
+          <GridItem rowSpan={1} colSpan={2}>
             <Input
+              boxShadow="md"
+              background={"antiquewhite"}
               boxSize={"small"}
-              width={"50%"}
+              width={"55%"}
               variant={"outline"}
               size="md"
               type="time"
@@ -86,30 +92,36 @@ function TableForm() {
 
   return (
     <>
-      <FormControl>
-        <TableContainer borderRadius={"14"} border={"2px"} borderColor={"green.200"}>
+      <Card boxShadow="dark-lg" borderRadius={"14"}>
+        <TableContainer
+          borderRadius={"14"}
+          border={"2px"}
+          borderColor={"green.200"}
+        >
           <Table
             justifyContent={"center"}
-           
+            background={"antiquewhite"}
             color="green.200"
             size="l"
             fontSize="small"
-            
-            
           >
             <Thead>
-              <Center>
-                <Text justifyContent={"center"} fontSize={"xxx-large"}>
+              <Container centerContent={true}>
+                <Text
+                  textShadow="1px 1px grey"
+                  m="6"
+                  textAlign={"center"}
+                  fontSize={"xxx-large"}
+                >
                   TABLE
                 </Text>
-              </Center>
+              </Container>
               <Tr>{Days.map(THead)}</Tr>
             </Thead>
             <Tbody>{mills.map(TRow)}</Tbody>
           </Table>
         </TableContainer>
-        ;
-      </FormControl>
+      </Card>
     </>
   );
 }

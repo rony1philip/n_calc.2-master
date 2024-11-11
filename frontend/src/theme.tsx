@@ -5,7 +5,10 @@ import {
   defineStyle,
   defineStyleConfig,
 } from "@chakra-ui/react";
+import { sliderAnatomy as parts } from "@chakra-ui/anatomy";
 import { inputAnatomy, } from "@chakra-ui/anatomy";
+
+
 
 const { definePartsStyle, defineMultiStyleConfig } =
   createMultiStyleConfigHelpers(inputAnatomy.keys);
@@ -52,6 +55,9 @@ const baseStyle = definePartsStyle({
   },
 });
 
+
+
+
 const variantInput = definePartsStyle((props) => {
   return {
     field: {
@@ -86,7 +92,7 @@ const variantTextArea = definePartsStyle((props) => {
 
       borderColor: "green.500",
       borderWidth: "2px",
-      fontsize: "large",
+      fontsize: "XX-large",
 
       _focus: {
         borderColor: "green.500",
@@ -95,10 +101,10 @@ const variantTextArea = definePartsStyle((props) => {
           bg: "whiteAlpha.100",
         },
       },
+      _focusWithin: { borderColor: "green.500" },
       _hover: {
         bg: "green.500",
         borderColor: "009688",
-       
       },
     },
   };
