@@ -1,4 +1,8 @@
 import {
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
   Input,
   Container,
   InputGroup,
@@ -15,25 +19,28 @@ import {
   ModalCloseButton,
   Box,
   Button,
+  Link,
   useDisclosure,
   Text,
 } from "@chakra-ui/react";
+
 import { Search2Icon } from "@chakra-ui/icons";
-import { createFileRoute } from "@tanstack/react-router";
+import {
+  Link as RouterLink,
+  createFileRoute,
+  redirect,
+} from "@tanstack/react-router";
 import Logo from "/assets/images/n.png";
 import useAuth from "../../hooks/useAuth";
-import TableForm from "../../components/Common/TableForm";
 import { useRef } from "react";
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
 });
 
-
 function Dashboard() {
   const { user: currentUser } = useAuth();
-    const { isOpen, onOpen, onClose } = useDisclosure();
-    const finalRef = useRef(null);
-
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const finalRef = useRef(null);
 
   return (
     <>
@@ -91,33 +98,28 @@ function Dashboard() {
               <ModalHeader>Register Patient</ModalHeader>
               <ModalCloseButton />
               <ModalBody>
-                <Text>Patient Name</Text>
-                <Input
-                  type="tel"
-                  placeholder="Patient Name"
-                />
-                <Text>Patient Phon Number</Text>
-                <Input
-                  type="tel"
-                  placeholder="Phone number"
-                />
-                <Text>Patient Id</Text>
-                <Input
-                  type="tel"
-                  placeholder="Patient Id"
-                />
+                <FormControl>
+                  <Text>Patient Name</Text>
+                  <Input type="tel" placeholder="Patient Name" />
+                  <Text>Patient Phon Number</Text>
+                  <Input type="tel" placeholder="Phone number" />
+                  <Text>Patient Id</Text>
+                  <Input type="tel" placeholder="Patient Id" />
+                </FormControl>
               </ModalBody>
 
               <ModalFooter>
                 <Button mr={3} onClick={onClose}>
                   Close
                 </Button>
-                <Button variant="primary">Patient Intake</Button>
+
+                <Link type="submit" as={RouterLink} to="/patient-intake">
+                  <Button variant="primary">Patient Intake</Button>
+                </Link>
               </ModalFooter>
             </ModalContent>
           </Modal>
         </Box>
-        <TableForm></TableForm>
       </Container>
     </>
   );
