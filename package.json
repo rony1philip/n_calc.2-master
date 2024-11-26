@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@chakra-ui/react": "^3.2.0",
     "again": "^0.0.1",
     "formik": "^2.4.6",
     "react-router-dom": "^7.0.1"

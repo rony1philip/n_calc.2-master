@@ -23,7 +23,7 @@ import {
   useDisclosure,
   Text,
 } from "@chakra-ui/react";
-import Multistep from "../../components/Common/PatientRegisterForm";
+import PatientRegisterForm from "../../components/Common/PatientRegisterForm";
 import { Search2Icon } from "@chakra-ui/icons";
 import {
   Link as RouterLink,
@@ -95,13 +95,10 @@ function Dashboard() {
           <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
-              
               <ModalCloseButton />
               <ModalBody>
-                <Multistep></Multistep>
+                <PatientRegisterForm></PatientRegisterForm>
               </ModalBody>
-
-              
             </ModalContent>
           </Modal>
         </Box>

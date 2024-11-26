@@ -19,13 +19,20 @@ import {
   FormHelperText,
   InputRightElement,
 } from "@chakra-ui/react";
+
 import {
   Link as RouterLink,
   createFileRoute,
   redirect,
 } from "@tanstack/react-router";
 import { useToast } from "@chakra-ui/react";
-
+import {
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
+} from "@chakra-ui/core";
 const Form1 = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -68,140 +75,87 @@ const Form1 = () => {
 const Form2 = () => {
   return (
     <>
-      <Heading w="100%" textAlign={"center"} fontWeight="normal" mb="2%">
-        User Details
+      <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
+        Patient Intake
       </Heading>
-      <FormControl as={GridItem} colSpan={[6, 3]}>
-        <FormLabel
-          htmlFor="country"
-          fontSize="sm"
-          fontWeight="md"
-          color="gray.700"
-          _dark={{
-            color: "gray.50",
-          }}
-        >
-          Country / Region
-        </FormLabel>
-        <Select
-          id="country"
-          name="country"
-          autoComplete="country"
-          placeholder="Select option"
-          focusBorderColor="brand.400"
-          shadow="sm"
-          size="sm"
-          w="full"
-          rounded="md"
-        >
-          <option>United States</option>
-          <option>Canada</option>
-          <option>Mexico</option>
-        </Select>
-      </FormControl>
+      <Flex>
+        <FormControl mr={"5%"} as={GridItem} colSpan={[6, 3]}>
+          <FormLabel
+            htmlFor="country"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
+            _dark={{
+              color: "gray.50",
+            }}
+          >
+            Gender
+          </FormLabel>
+          <Select
+            id="gender"
+            name="gender"
+            autoComplete="gender"
+            placeholder="Select option"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+          >
+            <option>Female</option>
+            <option>Male</option>
+          </Select>
+        </FormControl>
+        <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
+          <FormLabel
+            htmlFor="postal_code"
+            fontSize="sm"
+            fontWeight="md"
+            color="gray.700"
+            _dark={{
+              color: "gray.50",
+            }}
+            mt="2%"
+          >
+            Age
+          </FormLabel>
+          <Input
+            type="text"
+            name="postal_code"
+            id="postal_code"
+            autoComplete="postal-code"
+            focusBorderColor="brand.400"
+            shadow="sm"
+            size="sm"
+            w="full"
+            rounded="md"
+          />
+        </FormControl>
+      </Flex>
 
-      <FormControl as={GridItem} colSpan={6}>
+      <FormControl id="email" mt={1}>
         <FormLabel
-          htmlFor="street_address"
           fontSize="sm"
           fontWeight="md"
           color="gray.700"
           _dark={{
             color: "gray.50",
           }}
-          mt="2%"
         >
-          Street address
+          About
         </FormLabel>
-        <Input
-          type="text"
-          name="street_address"
-          id="street_address"
-          autoComplete="street-address"
-          focusBorderColor="brand.400"
+        <Textarea
+          placeholder="you@example.com"
+          rows={3}
           shadow="sm"
-          size="sm"
-          w="full"
-          rounded="md"
-        />
-      </FormControl>
-
-      <FormControl as={GridItem} colSpan={[6, 6, null, 2]}>
-        <FormLabel
-          htmlFor="city"
-          fontSize="sm"
-          fontWeight="md"
-          color="gray.700"
-          _dark={{
-            color: "gray.50",
+          focusBorderColor="brand.400"
+          fontSize={{
+            sm: "sm",
           }}
-          mt="2%"
-        >
-          City
-        </FormLabel>
-        <Input
-          type="text"
-          name="city"
-          id="city"
-          autoComplete="city"
-          focusBorderColor="brand.400"
-          shadow="sm"
-          size="sm"
-          w="full"
-          rounded="md"
         />
-      </FormControl>
-
-      <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
-        <FormLabel
-          htmlFor="state"
-          fontSize="sm"
-          fontWeight="md"
-          color="gray.700"
-          _dark={{
-            color: "gray.50",
-          }}
-          mt="2%"
-        >
-          State / Province
-        </FormLabel>
-        <Input
-          type="text"
-          name="state"
-          id="state"
-          autoComplete="state"
-          focusBorderColor="brand.400"
-          shadow="sm"
-          size="sm"
-          w="full"
-          rounded="md"
-        />
-      </FormControl>
-
-      <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
-        <FormLabel
-          htmlFor="postal_code"
-          fontSize="sm"
-          fontWeight="md"
-          color="gray.700"
-          _dark={{
-            color: "gray.50",
-          }}
-          mt="2%"
-        >
-          ZIP / Postal
-        </FormLabel>
-        <Input
-          type="text"
-          name="postal_code"
-          id="postal_code"
-          autoComplete="postal-code"
-          focusBorderColor="brand.400"
-          shadow="sm"
-          size="sm"
-          w="full"
-          rounded="md"
-        />
+        <FormHelperText>
+          Brief description for your profile. URLs are hyperlinked.
+        </FormHelperText>
       </FormControl>
     </>
   );
@@ -274,10 +228,10 @@ const Form3 = () => {
   );
 };
 
-export default function Multistep() {
+export default function PatientRegisterForm() {
   const toast = useToast();
   const [step, setStep] = useState(1);
-  const [progress, setProgress] = useState(33.33);
+  const [progress, setProgress] = useState(50.50);
 
   return (
     <>
@@ -298,14 +252,14 @@ export default function Multistep() {
           mx="5%"
           isAnimated
         ></Progress>
-        {step === 1 ? <Form1 /> : step === 2 ? <Form2 /> : <Form3 />}
+        {step === 1 ? <Form1 /> : <Form2 />}
         <ButtonGroup mt="5%" w="100%">
           <Flex w="100%" justifyContent="space-between">
             <Flex>
               <Button
                 onClick={() => {
                   setStep(step - 1);
-                  setProgress(progress - 33.33);
+                  setProgress(progress );
                 }}
                 isDisabled={step === 1}
                 variant="solid"
@@ -317,20 +271,20 @@ export default function Multistep() {
               <Button
                 colorScheme="teal"
                 w="7rem"
-                isDisabled={step === 3}
+                isDisabled={step === 2}
                 onClick={() => {
                   setStep(step + 1);
-                  if (step === 3) {
+                  if (step === 2) {
                     setProgress(100);
                   } else {
-                    setProgress(progress + 33.33);
+                    setProgress(progress + 50);
                   }
                 }}
               >
                 Next
               </Button>
             </Flex>
-            {step === 3 ? (
+            {step === 2 ? (
               <Link
                 variant="primary"
                 type="submit"
@@ -343,8 +297,8 @@ export default function Multistep() {
                   variant="primary"
                   onClick={() => {
                     toast({
-                      title: "Account created.",
-                      description: "We've created your account for you.",
+                      title: "Patient Intake Complete.",
+                      description: "We've created your patient account.",
                       status: "success",
                       duration: 3000,
                       isClosable: true,
