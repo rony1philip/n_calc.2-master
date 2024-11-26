@@ -32,9 +32,17 @@ import {
 } from "@tanstack/react-router";
 import { useToast } from "@chakra-ui/react";
 
-const Form1 = () => {
+
+
+
+export default function PatientRegisterForm() {
+  const toast = useToast();
+  const [step, setStep] = useState(1);
+  const [progress, setProgress] = useState(50.50);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+const Form1 = () => {
+  
   return (
     <>
       <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
@@ -124,7 +132,6 @@ const Form2 = () => {
             size="sm"
             w="full"
             rounded="md"
-            
             defaultValue={15}
             min={10}
             max={20}
@@ -162,13 +169,6 @@ const Form2 = () => {
     </>
   );
 };
-
-
-
-export default function PatientRegisterForm() {
-  const toast = useToast();
-  const [step, setStep] = useState(1);
-  const [progress, setProgress] = useState(50.50);
 
   return (
     <>
