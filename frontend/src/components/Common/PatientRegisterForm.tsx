@@ -41,6 +41,17 @@ export default function PatientRegisterForm() {
   const [progress, setProgress] = useState(50.50);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
+  const [formData, setFormData] = useState({
+    email: "",
+    firstName: "",
+    lastName: "",
+  });
+
+  const isForm1Valid = () => {
+    const isEmail = (email: string) =>
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+    return formData.firstName != "" && formData.lastName != "" && isEmail(formData.email);
+  }
 const Form1 = () => {
   
   return (
@@ -53,21 +64,52 @@ const Form1 = () => {
           <FormLabel htmlFor="first-name" fontWeight={"normal"}>
             First name
           </FormLabel>
-          <Input id="first-name" placeholder="First name" />
+          <Input
+            value={formData.firstName}
+            id="first-name"
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                firstName: e.target.value,
+              });
+            }}
+            placeholder="First name"
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel htmlFor="last-name" fontWeight={"normal"}>
             Last name
           </FormLabel>
-          <Input id="last-name" placeholder="Last name" />
+          <Input
+            id="last-name"
+            placeholder="Last name"
+            value={formData.lastName}
+            onChange={(e) => {
+              setFormData({
+                ...formData,
+                lastName: e.target.value,
+              });
+            }}
+          />
         </FormControl>
       </Flex>
       <FormControl mt="2%">
         <FormLabel htmlFor="email" fontWeight={"normal"}>
           Email address
         </FormLabel>
-        <Input id="email" type="email" placeholder="Email address" />
+        <Input
+          id="email"
+          type="email"
+          placeholder="Email address"
+          value={formData.email}
+          onChange={(e) => {
+            setFormData({
+              ...formData,
+              email: e.target.value,
+            });
+          }}
+        />
       </FormControl>
       <FormControl mt="2%">
         <FormLabel htmlFor="phone" fontWeight={"normal"}>
@@ -210,7 +252,9 @@ const Form2 = () => {
                 w="7rem"
                 isDisabled={step === 2}
                 onClick={() => {
-                  console.log()
+                  if (step == 1) {
+                    isForm1Valid() // checks if this is valid
+                  }
                   setStep(step + 1);
                   if (step === 2) {
                     setProgress(100);
