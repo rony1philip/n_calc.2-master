@@ -18,6 +18,11 @@ import {
   Textarea,
   FormHelperText,
   InputRightElement,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
+  NumberIncrementStepper,
+  NumberDecrementStepper,
 } from "@chakra-ui/react";
 
 import {
@@ -26,13 +31,7 @@ import {
   redirect,
 } from "@tanstack/react-router";
 import { useToast } from "@chakra-ui/react";
-import {
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
-} from "@chakra-ui/core";
+
 const Form1 = () => {
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
@@ -119,17 +118,23 @@ const Form2 = () => {
           >
             Age
           </FormLabel>
-          <Input
-            type="text"
-            name="postal_code"
-            id="postal_code"
-            autoComplete="postal-code"
+          <NumberInput
             focusBorderColor="brand.400"
             shadow="sm"
             size="sm"
             w="full"
             rounded="md"
-          />
+            
+            defaultValue={15}
+            min={10}
+            max={20}
+          >
+            <NumberInputField />
+            <NumberInputStepper>
+              <NumberIncrementStepper />
+              <NumberDecrementStepper />
+            </NumberInputStepper>
+          </NumberInput>
         </FormControl>
       </Flex>
 
@@ -145,7 +150,6 @@ const Form2 = () => {
           About
         </FormLabel>
         <Textarea
-          placeholder="you@example.com"
           rows={3}
           shadow="sm"
           focusBorderColor="brand.400"
@@ -153,9 +157,7 @@ const Form2 = () => {
             sm: "sm",
           }}
         />
-        <FormHelperText>
-          Brief description for your profile. URLs are hyperlinked.
-        </FormHelperText>
+        <FormHelperText>Brief description of your patient.</FormHelperText>
       </FormControl>
     </>
   );
