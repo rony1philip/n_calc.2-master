@@ -22,6 +22,7 @@ import {
   Link,
   useDisclosure,
   Text,
+  Center,
 } from "@chakra-ui/react";
 import PatientRegisterForm from "../../components/Common/PatientRegisterForm";
 import { Search2Icon } from "@chakra-ui/icons";
@@ -33,6 +34,7 @@ import {
 import Logo from "/assets/images/n.png";
 import useAuth from "../../hooks/useAuth";
 import { useRef, useState } from "react";
+import Combobox, { CreatableSelect } from "../../components/Common/ComboBox";
 export const Route = createFileRoute("/_layout/")({
   component: Dashboard,
 });
@@ -40,8 +42,7 @@ export const Route = createFileRoute("/_layout/")({
 function Dashboard() {
   const { user: currentUser } = useAuth();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const finalRef = useRef(null);
-
+  // const finalRef = useRef(null);
   return (
     <>
       <Container maxW="full">
@@ -92,7 +93,38 @@ function Dashboard() {
               />
             </InputGroup>
           </Flex>
-          <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+          <Box pt={28} m={4} width="74%">
+            <FormControl p={4}>
+              <Center>
+                <FormLabel textColor="ui.main" fontSize="2xl">
+                  Select your next destination
+                </FormLabel>
+              </Center>
+              <Box pt={4}>
+                <Combobox
+                  name="destination"
+                  options={[
+                    { value: "blue", label: "Blue", color: "#0052CC" },
+                    { value: "purple", label: "Purple", color: "#5243AA" },
+                    { value: "red", label: "Red", color: "#FF5630" },
+                    { value: "orange", label: "Orange", color: "#FF8B00" },
+                    { value: "yellow", label: "Yellow", color: "#FFC400" },
+                    { value: "green", label: "Green", color: "#36B37E" },
+                  ]}
+                  placeholder="Where to ..."
+                  closeMenuOnSelect={false}
+                  size="lg"
+                />
+              </Box>
+              <Center>
+                <Button variant="primary" type="submit">
+                  {" "}
+                  Subscribe
+                </Button>
+              </Center>
+            </FormControl>
+          </Box>
+          <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
               <ModalCloseButton />
