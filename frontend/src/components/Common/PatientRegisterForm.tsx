@@ -40,11 +40,13 @@ export default function PatientRegisterForm() {
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(50.50);
   const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
   const [formData, setFormData] = useState({
     email: "",
+    emailAutoFocus: false,
     firstName: "",
+    firstNameAutoFocus: false,
     lastName: "",
+    lastNameAutoFocus: false,
   });
 
   const isForm1Valid = () => {
@@ -65,12 +67,18 @@ const Form1 = () => {
             First name
           </FormLabel>
           <Input
+            key={"tahat"}
             value={formData.firstName}
             id="first-name"
+            autoFocus={formData.firstNameAutoFocus}
             onChange={(e) => {
+              e.preventDefault();
               setFormData({
                 ...formData,
                 firstName: e.target.value,
+                firstNameAutoFocus: true,
+                lastNameAutoFocus: false,
+                emailAutoFocus: false,
               });
             }}
             placeholder="First name"
@@ -85,10 +93,14 @@ const Form1 = () => {
             id="last-name"
             placeholder="Last name"
             value={formData.lastName}
+            autoFocus={formData.lastNameAutoFocus}
             onChange={(e) => {
               setFormData({
                 ...formData,
                 lastName: e.target.value,
+                lastNameAutoFocus: true,
+                emailAutoFocus: false,
+                firstNameAutoFocus: true,
               });
             }}
           />
@@ -103,10 +115,14 @@ const Form1 = () => {
           type="email"
           placeholder="Email address"
           value={formData.email}
+          autoFocus={formData.emailAutoFocus}
           onChange={(e) => {
             setFormData({
               ...formData,
               email: e.target.value,
+              emailAutoFocus: true,
+              firstNameAutoFocus: false,
+              lastNameAutoFocus: false,
             });
           }}
         />
@@ -251,9 +267,10 @@ const Form2 = () => {
                 colorScheme="teal"
                 w="7rem"
                 isDisabled={step === 2}
-                onClick={() => {
-                  if (step == 1) {
-                    isForm1Valid() // checks if this is valid
+                onClick={(e) => {
+                  e.preventDefault()
+                  if ((step == 1) && !isForm1Valid()) {
+                     return // checks if this is valid
                   }
                   setStep(step + 1);
                   if (step === 2) {
