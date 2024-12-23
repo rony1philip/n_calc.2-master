@@ -69,38 +69,9 @@ function Dashboard() {
             />
           </Flex>
           <Flex justify="center">
-            <InputGroup
-              display={"flex"}
-              justifyItems={"center"}
-              width={"80%"}
-              bgColor={"white"}
-              borderColor="#009688"
-              justifyContent={"center"}
-            >
-              <InputRightElement>
-                <IconButton
-                  variant="primary"
-                  onClick={onOpen}
-                  aria-label="Search database"
-                  icon={<Search2Icon color="white" />}
-                />
-              </InputRightElement>
-              <Input
-                fontFamily={"cursive"}
-                fontSize={"large"}
-                type="tel"
-                placeholder="Phone number"
-              />
-            </InputGroup>
-          </Flex>
-          <Box pt={28} m={4} width="74%">
-            <FormControl p={4}>
-              <Center>
-                <FormLabel textColor="ui.main" fontSize="2xl">
-                  Select your next destination
-                </FormLabel>
-              </Center>
-              <Box pt={4}>
+             <Box pt={0} m={4} width="74%">
+            <FormControl p={0}>
+              <Box pt={0}>
                 <Combobox
                   name="destination"
                   options={[
@@ -111,19 +82,21 @@ function Dashboard() {
                     { value: "yellow", label: "Yellow", color: "#FFC400" },
                     { value: "green", label: "Green", color: "#36B37E" },
                   ]}
-                  placeholder="Where to ..."
-                  closeMenuOnSelect={false}
+                  placeholder="Patient Name"
+                  closeMenuOnSelect={true}
                   size="lg"
                 />
               </Box>
               <Center>
-                <Button variant="primary" type="submit">
+                <Button onClick={onOpen} variant="primary" type="submit">
                   {" "}
                   Subscribe
                 </Button>
               </Center>
             </FormControl>
           </Box>
+          </Flex>
+        
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>

@@ -110,7 +110,7 @@ const chakraComponents = {
     };
 
     return (
-     
+      <StylesProvider value={inputStyles}>
         <Flex
           ref={innerRef}
           sx={{
@@ -127,7 +127,7 @@ const chakraComponents = {
         >
           {children}
         </Flex>
-      
+      </StylesProvider>
     );
   },
   MultiValueContainer: ({
@@ -202,7 +202,7 @@ const chakraComponents = {
     const menuStyles = useMultiStyleConfig("Menu");
     return (
       <selectComponents.Menu {...props}>
-       
+        <StylesProvider value={menuStyles}>{children}</StylesProvider>
       </selectComponents.Menu>
     );
   },
