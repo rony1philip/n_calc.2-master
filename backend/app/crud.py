@@ -4,7 +4,11 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
+<<<<<<< Updated upstream
 from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+=======
+from api.user.models import  User, UserCreate, UserUpdate
+>>>>>>> Stashed changes
 
 
 def create_user(*, session: Session, user_create: UserCreate) -> User:
