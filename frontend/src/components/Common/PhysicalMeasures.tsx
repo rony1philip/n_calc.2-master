@@ -22,6 +22,7 @@ import {
   SliderFilledTrack,
   SliderThumb,
   Tooltip,
+  Flex
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
@@ -86,6 +87,7 @@ function FemaleMale() {
 const PhysicalMeasuresF = () => {
   return (
     <>
+   <Container centerContent={true}>
       <Card
         boxShadow="dark-lg"
         textColor={"green.200"}
@@ -93,7 +95,7 @@ const PhysicalMeasuresF = () => {
         borderRadius={"14"}
         borderWidth={"2px"}
         borderColor={"green.200"}
-        width={"55%"}
+        width={"100%"}
       >
         <CardHeader>
           <Heading
@@ -187,7 +189,7 @@ const PhysicalMeasuresF = () => {
             </Card>
           </Box>
         </CardBody>
-      </Card>
+      </Card></Container>
       ;
     </>
   );

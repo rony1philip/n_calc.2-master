@@ -8,6 +8,9 @@ import {
   Heading,
   Flex,
   FormControl,
+  
+  FormErrorMessage,
+  FormHelperText,
   GridItem,
   FormLabel,
   Input,
@@ -16,7 +19,7 @@ import {
   InputLeftAddon,
   InputGroup,
   Textarea,
-  FormHelperText,
+ 
   InputRightElement,
   NumberInput,
   NumberInputField,
@@ -47,22 +50,31 @@ export default function PatientRegisterForm() {
     firstNameAutoFocus: false,
     lastName: "",
     lastNameAutoFocus: false,
+    phoneNumber: "",
+    phoneNumberAutoFocus: false,
   });
 
-  const isForm1Valid = () => {
+  const isForm1Invalid = () => {
     const isEmail = (email: string) =>
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
-    return formData.firstName != "" && formData.lastName != "" && isEmail(formData.email);
+    const isPhone = (phoneNumber: string) => 
+      /^[0-9]*$/g.test(phoneNumber)
+    const notHeveInput = formData.firstName == "" || formData.lastName == ""
+    if (notHeveInput || isEmail(formData.email) == false || isPhone(formData.phoneNumber) == false){
+      return true
+    }else{
+      return false
+    }
   }
 const Form1 = () => {
   
   return (
-    <>
+    <> <FormControl isInvalid={isForm1Invalid()} mr="5%">
       <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
         Register Patient{" "}
       </Heading>
       <Flex>
-        <FormControl mr="5%">
+       
           <FormLabel htmlFor="first-name" fontWeight={"normal"}>
             First name
           </FormLabel>
@@ -83,9 +95,7 @@ const Form1 = () => {
             }}
             placeholder="First name"
           />
-        </FormControl>
-
-        <FormControl>
+    
           <FormLabel htmlFor="last-name" fontWeight={"normal"}>
             Last name
           </FormLabel>
@@ -104,9 +114,9 @@ const Form1 = () => {
               });
             }}
           />
-        </FormControl>
+        
       </Flex>
-      <FormControl mt="2%">
+     
         <FormLabel htmlFor="email" fontWeight={"normal"}>
           Email address
         </FormLabel>
@@ -126,13 +136,14 @@ const Form1 = () => {
             });
           }}
         />
-      </FormControl>
-      <FormControl mt="2%">
+      
         <FormLabel htmlFor="phone" fontWeight={"normal"}>
           Phone Number
         </FormLabel>
-        <Input placeholder="Phone Number" id="phone" type="phone" />
+        <Input placeholder="Phone Number" id="phone" type="phone" /> 
+        <FormErrorMessage>please check that all fields are valid</FormErrorMessage>
       </FormControl>
+    
     </>
   );
 };
@@ -269,7 +280,7 @@ const Form2 = () => {
                 isDisabled={step === 2}
                 onClick={(e) => {
                   e.preventDefault()
-                  if ((step == 1) && !isForm1Valid()) {
+                  if ((step == 1) && isForm1Invalid()) {
                      return // checks if this is valid
                   }
                   setStep(step + 1);

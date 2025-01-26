@@ -16,6 +16,7 @@ import {
   Grid,
   GridItem,
   FormControl,
+  Flex
   
 } from "@chakra-ui/react";
 import PhysicalMeasuresF from "../../components/Common/PhysicalMeasures";
@@ -26,28 +27,20 @@ export const Route = createFileRoute("/_layout/patient-intake")({
 function PatientIntake() {
   return (
     <>
- 
-      <Container padding={"5%"} maxWidth={"80%"}>
-        <Card width={"80%"}>
-          <CardHeader>
-            <Heading size="md">Client Report</Heading>
-          </CardHeader>
 
-          <CardBody></CardBody>
-        </Card>
-        <Box padding={"15px"}>
-          <TableForm></TableForm>
+    <Box paddingLeft={19}>
+     <PhysicalMeasuresF></PhysicalMeasuresF>
+          <PhysicalMeasuresF></PhysicalMeasuresF>
         </Box>
-      </Container>
+        <Box>
+    <TableForm></TableForm></Box>
+     
+       
+  
 
-      <FormControl>
-      <Container padding={"5%"} maxWidth={"80%"} centerContent={true}>
-       <PhysicalMeasuresF></PhysicalMeasuresF>
-        <Box padding={"15px"}>
-          <TableForm></TableForm>
-        </Box>
-      </Container></FormControl>
+      
+  
 
     </>
-  );
+  )
 }
