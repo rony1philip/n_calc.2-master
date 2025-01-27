@@ -37,16 +37,15 @@ const UserMenu = () => {
             isRound
             data-testid="user-menu"
           />
-          <MenuList fontSize="large" fontFamily="cursive">
+          <MenuList bg="#edf2f7" fontSize="large" fontFamily="cursive">
             <SidebarItems></SidebarItems>
-            <MenuItem icon={<FiUser fontSize="18px" />} as={Link} to="settings">
-              My profile
-            </MenuItem>
+
             <MenuItem
               icon={<FiLogOut fontSize="18px" />}
               onClick={handleLogout}
               color="ui.danger"
               fontWeight="bold"
+              bg="#edf2f7"
             >
               Log out
             </MenuItem>

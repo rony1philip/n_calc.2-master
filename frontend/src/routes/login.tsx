@@ -84,17 +84,14 @@ function Login() {
           alignSelf="center"
           mb={4}
         />
-        <FormControl id="username" isInvalid={!!errors.username || !!error}>
+        <FormControl id="username"  isInvalid={!!errors.username || !!error}>
           <Input
             id="username"
+            focusBorderColor="green"
             {...register("username", {
               required: "Email is required",
               pattern: emailPattern,
             })}
-            fontFamily="cursive"
-            fontSize={"large"}
-            borderColor="#009688"
-            bgColor={"white"}
             placeholder="Email"
             type="email"
             required
@@ -109,10 +106,6 @@ function Login() {
               {...register("password", {
                 required: "Password is required",
               })}
-              fontFamily="cursive"
-              fontSize={"large"}
-              borderColor="#009688"
-              bgColor={"white"}
               type={show ? "text" : "password"}
               placeholder="Password"
               required
@@ -149,7 +142,6 @@ function Login() {
           type="submit"
           isLoading={isSubmitting}
           fontFamily="cursive"
-          fontSize={"x-large"}
         >
           Log In
         </Button>
