@@ -45,15 +45,7 @@ class User(UserBase, table=True):
     items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
     Patients: list["Item"] = Relationship(back_populates="caregiver", cascade_delete=True)
 
-class Patient(SQLModel, table=True):
-    age:int
-    weight:int
-    gender:int
-    height:float
-    activity_level:int 
-    id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
-    owner_id: uuid.UUID = Field(foreign_key="user.id", nullable=False, ondelete="CASCADE")
-    caregiver : User | None = Relationship(back_populates="patients")
+
 # Properties to return via API, id is always required
 class UserPublic(UserBase):
     id: uuid.UUID
