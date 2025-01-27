@@ -42,8 +42,9 @@ export default function PatientRegisterForm() {
   const toast = useToast();
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(50.50);
-  const [show, setShow] = useState(false);
-  const [formData, setFormData] = useState({
+  const [input, setInput] = useState('')
+  
+  const [form1Data, setForm1Data] = useState({
     email: "",
     emailAutoFocus: false,
     firstName: "",
@@ -53,14 +54,23 @@ export default function PatientRegisterForm() {
     phoneNumber: "",
     phoneNumberAutoFocus: false,
   });
-
+  const [form2Data, setForm2Data] = useState({
+    gender: "",
+    genderAutoFocus: false,
+    age: "",
+    ageFocus: false,
+    about: "",
+    aboutAutoFocus: false,
+   
+  });
+  const handleInputChange = (e) => setForm1Data(e.target.value)
   const isForm1Invalid = () => {
     const isEmail = (email: string) =>
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
     const isPhone = (phoneNumber: string) => 
-      /^[0-9]*$/g.test(phoneNumber)
-    const notHeveInput = formData.firstName == "" || formData.lastName == ""
-    if (notHeveInput || isEmail(formData.email) == false || isPhone(formData.phoneNumber) == false){
+      /^[0-9]*$/i.test(phoneNumber)
+    const notHeveInput = form1Data.firstName == "" || form1Data.lastName == "" || form1Data.phoneNumber == ""
+    if (notHeveInput || isEmail(form1Data.email) == false || isPhone(form1Data.phoneNumber) == false){
       return true
     }else{
       return false
@@ -80,19 +90,22 @@ const Form1 = () => {
           </FormLabel>
           <Input
             key={"tahat"}
-            value={formData.firstName}
+            value={form1Data.firstName}
             id="first-name"
-            autoFocus={formData.firstNameAutoFocus}
-            onChange={(e) => {
+            autoFocus={form1Data.firstNameAutoFocus}
+            onChange={
+              
+              (e) => {
               e.preventDefault();
-              setFormData({
-                ...formData,
+              handleInputChange
+              setForm1Data({
+                ...form1Data,
                 firstName: e.target.value,
                 firstNameAutoFocus: true,
                 lastNameAutoFocus: false,
                 emailAutoFocus: false,
               });
-            }}
+            } }
             placeholder="First name"
           />
     
@@ -102,11 +115,12 @@ const Form1 = () => {
           <Input
             id="last-name"
             placeholder="Last name"
-            value={formData.lastName}
-            autoFocus={formData.lastNameAutoFocus}
+            value={form1Data.lastName}
+            autoFocus={form1Data.lastNameAutoFocus}
             onChange={(e) => {
-              setFormData({
-                ...formData,
+              handleInputChange
+              setForm1Data({
+                ...form1Data,
                 lastName: e.target.value,
                 lastNameAutoFocus: true,
                 emailAutoFocus: false,
@@ -124,11 +138,12 @@ const Form1 = () => {
           id="email"
           type="email"
           placeholder="Email address"
-          value={formData.email}
-          autoFocus={formData.emailAutoFocus}
+          value={form1Data.email}
+          autoFocus={form1Data.emailAutoFocus}
           onChange={(e) => {
-            setFormData({
-              ...formData,
+            handleInputChange
+            setForm1Data({
+              ...form1Data,
               email: e.target.value,
               emailAutoFocus: true,
               firstNameAutoFocus: false,
@@ -136,11 +151,28 @@ const Form1 = () => {
             });
           }}
         />
-      
-        <FormLabel htmlFor="phone" fontWeight={"normal"}>
+            <FormLabel htmlFor="phone" fontWeight={"normal"}>
           Phone Number
         </FormLabel>
-        <Input placeholder="Phone Number" id="phone" type="phone" /> 
+        <Input
+          id="phone"
+          type="phone"
+          placeholder="Phone Number"
+          value={form1Data.phoneNumber}
+          autoFocus={form1Data.phoneNumberAutoFocus}
+          onChange={(e) => {
+            handleInputChange
+            setForm1Data({
+              ...form1Data,
+              phoneNumber: e.target.value,
+              phoneNumberAutoFocus: true,
+              firstNameAutoFocus: false,
+              lastNameAutoFocus: false,
+            });
+          }}
+        />
+      
+     
         <FormErrorMessage>please check that all fields are valid</FormErrorMessage>
       </FormControl>
     
@@ -150,12 +182,13 @@ const Form1 = () => {
 
 const Form2 = () => {
   return (
-    <>
+    <> 
+    <FormControl mr={"5%"} as={GridItem} colSpan={[6, 3]}>
       <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
         Patient Intake
       </Heading>
       <Flex>
-        <FormControl mr={"5%"} as={GridItem} colSpan={[6, 3]}>
+       
           <FormLabel
             htmlFor="country"
             fontSize="sm"
@@ -181,8 +214,7 @@ const Form2 = () => {
             <option>Female</option>
             <option>Male</option>
           </Select>
-        </FormControl>
-        <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
+       
           <FormLabel
             htmlFor="postal_code"
             fontSize="sm"
@@ -211,10 +243,10 @@ const Form2 = () => {
               <NumberDecrementStepper />
             </NumberInputStepper>
           </NumberInput>
-        </FormControl>
+     
       </Flex>
 
-      <FormControl id="email" mt={1}>
+      
         <FormLabel
           fontSize="sm"
           fontWeight="md"
@@ -277,7 +309,9 @@ const Form2 = () => {
               <Button
                 colorScheme="teal"
                 w="7rem"
-                isDisabled={step === 2}
+                isDisabled={step === 2
+                  
+                }
                 onClick={(e) => {
                   e.preventDefault()
                   if ((step == 1) && isForm1Invalid()) {
