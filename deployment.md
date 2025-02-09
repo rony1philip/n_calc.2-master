@@ -51,10 +51,10 @@ docker network create traefik-public
 
 The Traefik Docker Compose file expects some environment variables to be set in your terminal before starting it. You can do it by running the following commands in your remote server.
 
-* Create the username for HTTP Basic Auth, e.g.:
+* Create the caregivername for HTTP Basic Auth, e.g.:
 
 ```bash
-export USERNAME=admin
+export caregiverNAME=admin
 ```
 
 * Create an environment variable with the password for HTTP Basic Auth, e.g.:
@@ -131,16 +131,16 @@ You can set several variables, like:
 * `STACK_NAME`: The name of the stack used for Docker Compose labels and project name, this should be different for `staging`, `production`, etc. You could use the same domain replacing dots with dashes, e.g. `fastapi-project-example-com` and `staging-fastapi-project-example-com`.
 * `BACKEND_CORS_ORIGINS`: A list of allowed CORS origins separated by commas.
 * `SECRET_KEY`: The secret key for the FastAPI project, used to sign tokens.
-* `FIRST_SUPERUSER`: The email of the first superuser, this superuser will be the one that can create new users.
-* `FIRST_SUPERUSER_PASSWORD`: The password of the first superuser.
+* `FIRST_SUPERcaregiver`: The email of the first supercaregiver, this supercaregiver will be the one that can create new caregivers.
+* `FIRST_SUPERcaregiver_PASSWORD`: The password of the first supercaregiver.
 * `SMTP_HOST`: The SMTP server host to send emails, this would come from your email provider (E.g. Mailgun, Sparkpost, Sendgrid, etc).
-* `SMTP_USER`: The SMTP server user to send emails.
+* `SMTP_caregiver`: The SMTP server caregiver to send emails.
 * `SMTP_PASSWORD`: The SMTP server password to send emails.
 * `EMAILS_FROM_EMAIL`: The email account to send emails from.
 * `POSTGRES_SERVER`: The hostname of the PostgreSQL server. You can leave the default of `db`, provided by the same Docker Compose. You normally wouldn't need to change this unless you are using a third-party provider.
 * `POSTGRES_PORT`: The port of the PostgreSQL server. You can leave the default. You normally wouldn't need to change this unless you are using a third-party provider.
 * `POSTGRES_PASSWORD`: The Postgres password.
-* `POSTGRES_USER`: The Postgres user, you can leave the default.
+* `POSTGRES_USER`: The Postgres caregiver, you can leave the default.
 * `POSTGRES_DB`: The database name to use for this application. You can leave the default of `app`.
 * `SENTRY_DSN`: The DSN for Sentry, if you are using it.
 
@@ -183,7 +183,7 @@ There are already two environments configured, `staging` and `production`. 🚀
 
 ### Install GitHub Actions Runner
 
-* On your remote server, if you are running as the `root` user, create a user for your GitHub Actions:
+* On your remote server, if you are running as the `root` caregiver, create a caregiver for your GitHub Actions:
 
 ```bash
 adduser github
@@ -201,7 +201,7 @@ usermod -aG docker github
 su - github
 ```
 
-* Go to the `github` user's home directory:
+* Go to the `github` caregiver's home directory:
 
 ```bash
 cd
@@ -213,21 +213,21 @@ cd
 
 After installing, the guide would tell you to run a command to start the runner. Nevertheless, it would stop once you terminate that process or if your local connection to your server is lost.
 
-To make sure it runs on startup and continues running, you can install it as a service. To do that, exit the `github` user and go back to the `root` user:
+To make sure it runs on startup and continues running, you can install it as a service. To do that, exit the `github` caregiver and go back to the `root` caregiver:
 
 ```bash
 exit
 ```
 
-After you do it, you would be on the `root` user again. And you will be on the previous directory, belonging to the `root` user.
+After you do it, you would be on the `root` caregiver again. And you will be on the previous directory, belonging to the `root` caregiver.
 
-* Go to the `actions-runner` directory inside of the `github` user's home directory:
+* Go to the `actions-runner` directory inside of the `github` caregiver's home directory:
 
 ```bash
 cd /home/github/actions-runner
 ```
 
-* Install the self-hosted runner as a service with the user `github`:
+* Install the self-hosted runner as a service with the caregiver `github`:
 
 ```bash
 ./svc.sh install github
@@ -258,8 +258,8 @@ The current Github Actions workflows expect these secrets:
 * `STACK_NAME_PRODUCTION`
 * `STACK_NAME_STAGING`
 * `EMAILS_FROM_EMAIL`
-* `FIRST_SUPERUSER`
-* `FIRST_SUPERUSER_PASSWORD`
+* `FIRST_SUPERcaregiver`
+* `FIRST_SUPERcaregiver_PASSWORD`
 * `POSTGRES_PASSWORD`
 * `SECRET_KEY`
 * `LATEST_CHANGES`

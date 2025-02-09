@@ -32,17 +32,17 @@
 
 [![API docs](img/dashboard.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
-### Dashboard - Create User
+### Dashboard - Create caregiver
 
 [![API docs](img/dashboard-create.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
-### Dashboard - Items
+### Dashboard - Patient
 
-[![API docs](img/dashboard-items.png)](https://github.com/fastapi/full-stack-fastapi-template)
+[![API docs](img/dashboard-Patient.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
-### Dashboard - User Settings
+### Dashboard - caregiver Settings
 
-[![API docs](img/dashboard-user-settings.png)](https://github.com/fastapi/full-stack-fastapi-template)
+[![API docs](img/dashboard-caregiver-settings.png)](https://github.com/fastapi/full-stack-fastapi-template)
 
 ### Dashboard - Dark Mode
 
@@ -133,7 +133,7 @@ You can then update configs in the `.env` files to customize your configurations
 Before deploying it, make sure you change at least the values for:
 
 - `SECRET_KEY`
-- `FIRST_SUPERUSER_PASSWORD`
+- `FIRST_SUPERcaregiver_PASSWORD`
 - `POSTGRES_PASSWORD`
 
 You can (and should) pass these as environment variables from secrets.
@@ -200,13 +200,13 @@ But don't worry, you can just update any of that in the `.env` files afterwards.
 
 The input variables, with their default values (some auto generated) are:
 
-- `project_name`: (default: `"FastAPI Project"`) The name of the project, shown to API users (in .env).
+- `project_name`: (default: `"FastAPI Project"`) The name of the project, shown to API caregivers (in .env).
 - `stack_name`: (default: `"fastapi-project"`) The name of the stack used for Docker Compose labels and project name (no spaces, no periods) (in .env).
 - `secret_key`: (default: `"changethis"`) The secret key for the project, used for security, stored in .env, you can generate one with the method above.
-- `first_superuser`: (default: `"admin@example.com"`) The email of the first superuser (in .env).
-- `first_superuser_password`: (default: `"changethis"`) The password of the first superuser (in .env).
+- `first_supercaregiver`: (default: `"admin@example.com"`) The email of the first supercaregiver (in .env).
+- `first_supercaregiver_password`: (default: `"changethis"`) The password of the first supercaregiver (in .env).
 - `smtp_host`: (default: "") The SMTP server host to send emails, you can set it later in .env.
-- `smtp_user`: (default: "") The SMTP server user to send emails, you can set it later in .env.
+- `smtp_caregiver`: (default: "") The SMTP server caregiver to send emails, you can set it later in .env.
 - `smtp_password`: (default: "") The SMTP server password to send emails, you can set it later in .env.
 - `emails_from_email`: (default: `"info@example.com"`) The email account to send emails from, you can set it later in .env.
 - `postgres_password`: (default: `"changethis"`) The password for the PostgreSQL database, stored in .env, you can generate one with the method above.

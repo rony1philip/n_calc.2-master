@@ -11,7 +11,8 @@ from sqlmodel import Session
 from app.core import security
 from app.core.config import settings
 from app.core.db import engine
-from app.models import TokenPayload, User
+from app.models import TokenPayload
+from api.caregiver.models import Caregiver
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -27,7 +28,7 @@ SessionDep = Annotated[Session, Depends(get_db)]
 TokenDep = Annotated[str, Depends(reusable_oauth2)]
 
 
-def get_current_user(session: SessionDep, token: TokenDep) -> User:
+def get_current_Caregiver(session: SessionDep, token: TokenDep) -> Caregiver:
     try:
         payload = jwt.decode(
             token, settings.SECRET_KEY, algorithms=[security.ALGORITHM]
@@ -38,20 +39,20 @@ def get_current_user(session: SessionDep, token: TokenDep) -> User:
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = session.get(User, token_data.sub)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
-    return user
+    caregiver = session.get(Caregiver, token_data.sub)
+    if not caregiver:
+        raise HTTPException(status_code=404, detail="Caregiver not found")
+    if not caregiver.is_active:
+        raise HTTPException(status_code=400, detail="Inactive Caregiver")
+    return caregiver
 
 
-CurrentUser = Annotated[User, Depends(get_current_user)]
+CurrentCaregiver = Annotated[Caregiver, Depends(get_current_Caregiver)]
 
 
-def get_current_active_superuser(current_user: CurrentUser) -> User:
-    if not current_user.is_superuser:
+def get_current_active_superCaregiver(current_Caregiver: CurrentCaregiver) -> Caregiver:
+    if not current_Caregiver.is_superCaregiver:
         raise HTTPException(
-            status_code=403, detail="The user doesn't have enough privileges"
+            status_code=403, detail="The Caregiver doesn't have enough privileges"
         )
-    return current_user
+    return current_Caregiver

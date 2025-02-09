@@ -1,34 +1,34 @@
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
 import uuid
-from app.models import *
+
 
 # Shared properties
-class UserBase(SQLModel):
+class CaregiverBase(SQLModel):
     email: EmailStr = Field(unique=True, index=True, max_length=255)
     is_active: bool = True
-    is_superuser: bool = False
+    is_supercaregiver: bool = False
     full_name: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive via API on creation
-class UserCreate(UserBase):
+class CaregiverCreate(CaregiverBase):
     password: str = Field(min_length=8, max_length=40)
 
 
-class UserRegister(SQLModel):
+class CaregiverRegister(SQLModel):
     email: EmailStr = Field(max_length=255)
     password: str = Field(min_length=8, max_length=40)
     full_name: str | None = Field(default=None, max_length=255)
 
 
 # Properties to receive via API on update, all are optional
-class UserUpdate(UserBase):
+class CaregiverUpdate(CaregiverBase):
     email: EmailStr | None = Field(default=None, max_length=255)  # type: ignore
     password: str | None = Field(default=None, min_length=8, max_length=40)
 
 
-class UserUpdateMe(SQLModel):
+class CaregiverUpdateMe(SQLModel):
     full_name: str | None = Field(default=None, max_length=255)
     email: EmailStr | None = Field(default=None, max_length=255)
 
@@ -39,18 +39,19 @@ class UpdatePassword(SQLModel):
 
 
 # Database model, database table inferred from class name
-class User(UserBase, table=True):
+class Caregiver(CaregiverBase, table=True):
+    __tablename__ = "caregiver_table"
+    __table_args__ = {'extend_existing': True} 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    items: list["Item"] = Relationship(back_populates="owner", cascade_delete=True)
-    Patients: list["Item"] = Relationship(back_populates="caregiver", cascade_delete=True)
+    patients: list["app.api.patient.models.Patient"] = Relationship(back_populates="caregiver", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
-class UserPublic(UserBase):
+class CaregiverPublic(CaregiverBase):
     id: uuid.UUID
 
 
-class UsersPublic(SQLModel):
-    data: list[UserPublic]
+class CaregiversPublic(SQLModel):
+    data: list[CaregiverPublic]
     count: int

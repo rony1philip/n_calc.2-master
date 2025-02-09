@@ -1,4 +1,4 @@
-"""Add max length for string(varchar) fields in User and Items models
+"""Add max length for string(varchar) fields in caregiver and Items models
 
 Revision ID: 9c0a54914c78
 Revises: e2412789c190
@@ -18,52 +18,52 @@ depends_on = None
 
 
 def upgrade():
-    # Adjust the length of the email field in the User table
-    op.alter_column('user', 'email',
+    # Adjust the length of the email field in the caregiver table
+    op.alter_column('caregiver', 'email',
                existing_type=sa.String(),
                type_=sa.String(length=255),
                existing_nullable=False)
 
-    # Adjust the length of the full_name field in the User table
-    op.alter_column('user', 'full_name',
+    # Adjust the length of the full_name field in the caregiver table
+    op.alter_column('caregiver', 'full_name',
                existing_type=sa.String(),
                type_=sa.String(length=255),
                existing_nullable=True)
 
     # Adjust the length of the title field in the Item table
-    op.alter_column('item', 'title',
+    op.alter_column('patient', 'title',
                existing_type=sa.String(),
                type_=sa.String(length=255),
                existing_nullable=False)
 
     # Adjust the length of the description field in the Item table
-    op.alter_column('item', 'description',
+    op.alter_column('patient', 'description',
                existing_type=sa.String(),
                type_=sa.String(length=255),
                existing_nullable=True)
 
 
 def downgrade():
-    # Revert the length of the email field in the User table
-    op.alter_column('user', 'email',
+    # Revert the length of the email field in the caregiver table
+    op.alter_column('caregiver', 'email',
                existing_type=sa.String(length=255),
                type_=sa.String(),
                existing_nullable=False)
 
-    # Revert the length of the full_name field in the User table
-    op.alter_column('user', 'full_name',
+    # Revert the length of the full_name field in the caregiver table
+    op.alter_column('caregiver', 'full_name',
                existing_type=sa.String(length=255),
                type_=sa.String(),
                existing_nullable=True)
 
     # Revert the length of the title field in the Item table
-    op.alter_column('item', 'title',
+    op.alter_column('patient', 'title',
                existing_type=sa.String(length=255),
                type_=sa.String(),
                existing_nullable=False)
 
     # Revert the length of the description field in the Item table
-    op.alter_column('item', 'description',
+    op.alter_column('patient', 'description',
                existing_type=sa.String(length=255),
                type_=sa.String(),
                existing_nullable=True)

@@ -1,9 +1,6 @@
-m ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,v≈dv bnhJMJ,import uuid
 from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
-
 from app import crud
 from app.api.deps import (
     CurrentUser,
@@ -13,10 +10,10 @@ from app.api.deps import (
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
 from app.models import (
-    Item,
+    Patient,
     Message,
 )
-from api.user.models import User, UserCreate,UserPublic,UserRegister, UsersPublic,UserUpdate,UserUpdateMe
+from api.caregiver.models import User, UserCreate,UserPublic,UserRegister, UsersPublic,UserUpdate,UserUpdateMe
 from app.utils import generate_new_account_email, send_email
 
 router = APIRouter()
@@ -78,7 +75,7 @@ def update_user_me(
 
     if user_in.email:
         existing_user = crud.get_user_by_email(session=session, email=user_in.email)
-        if existing_user and existing_user.id != current_user.id:
+        if existing_user and existing_patient.id != current_patient.id:
             raise HTTPException(
                 status_code=409, detail="User with this email already exists"
             )
@@ -127,7 +124,7 @@ def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
         raise HTTPException(
             status_code=403, detail="Super users are not allowed to delete themselves"
         )
-    statement = delete(Item).where(col(Item.owner_id) == current_user.id)
+    statement = delete(Patient).where(col(Patient.owner_id) == current_patient.id)
     session.exec(statement)  # type: ignore
     session.delete(current_user)
     session.commit()
@@ -191,7 +188,7 @@ def update_user(
         )
     if user_in.email:
         existing_user = crud.get_user_by_email(session=session, email=user_in.email)
-        if existing_user and existing_user.id != user_id:
+        if existing_user and existing_patient.id != user_id:
             raise HTTPException(
                 status_code=409, detail="User with this email already exists"
             )
@@ -214,7 +211,7 @@ def delete_user(
         raise HTTPException(
             status_code=403, detail="Super users are not allowed to delete themselves"
         )
-    statement = delete(Item).where(col(Item.owner_id) == user_id)
+    statement = delete(Patient).where(col(Patient.owner_id) == user_id)
     session.exec(statement)  # type: ignore
     session.delete(user)
     session.commit()
