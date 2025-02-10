@@ -27,17 +27,17 @@ def test_create_item(
 def test_read_item(
     client: TestClient, superuser_token_headers: dict[str, str], db: Session
 ) -> None:
-    item = create_random_item(db)
+    patient = create_random_item(db)
     response = client.get(
-        f"{settings.API_V1_STR}/items/{item.id}",
+        f"{settings.API_V1_STR}/items/{patient.id}",
         headers=superuser_token_headers,
     )
     assert response.status_code == 200
     content = response.json()
-    assert content["title"] == item.title
-    assert content["description"] == item.description
-    assert content["id"] == str(item.id)
-    assert content["owner_id"] == str(item.owner_id)
+    assert content["title"] == patient.title
+    assert content["description"] == patient.description
+    assert content["id"] == str(patient.id)
+    assert content["owner_id"] == str(patient.owner_id)
 
 
 def test_read_item_not_found(

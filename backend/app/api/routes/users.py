@@ -1,29 +1,19 @@
-m ,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,v≈dv bnhJMJ,import uuid
+import uuid
 from typing import Any
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import col, delete, func, select
-
 from app import crud
 from app.api.deps import (
-    CurrentUser,
+    get_current_active_superCaregiver,
     SessionDep,
-    get_current_active_superuser,
+    get_current_Caregiver,
+    CurrentCaregiver
 )
 from app.core.config import settings
 from app.core.security import get_password_hash, verify_password
-from app.models import (
-    Item,
-    Message,
-    UpdatePassword,
-    User,
-    UserCreate,
-    UserPublic,
-    UserRegister,
-    UsersPublic,
-    UserUpdate,
-    UserUpdateMe,
-)
+from app.models import Message
+from app.api.patient.models import Patient
+from app.api.caregiver.models import Caregiver, CaregiverCreate,CaregiverPublic,CaregiverRegister, CaregiversPublic,CaregiverUpdate,CaregiverUpdateMe, UpdatePassword
 from app.utils import generate_new_account_email, send_email
 
 router = APIRouter()
@@ -31,198 +21,198 @@ router = APIRouter()
 
 @router.get(
     "/",
-    dependencies=[Depends(get_current_active_superuser)],
-    response_model=UsersPublic,
+    dependencies=[Depends(get_current_active_superCaregiver)],
+    response_model=CaregiversPublic,
 )
-def read_users(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
+def read_caregivers(session: SessionDep, skip: int = 0, limit: int = 100) -> Any:
     """
-    Retrieve users.
+    Retrieve caregivers.
     """
 
-    count_statement = select(func.count()).select_from(User)
+    count_statement = select(func.count()).select_from(Caregiver)
     count = session.exec(count_statement).one()
 
-    statement = select(User).offset(skip).limit(limit)
-    users = session.exec(statement).all()
+    statement = select(Caregiver).offset(skip).limit(limit)
+    caregivers = session.exec(statement).all()
 
-    return UsersPublic(data=users, count=count)
+    return CaregiversPublic(data=caregivers, count=count)
 
 
 @router.post(
-    "/", dependencies=[Depends(get_current_active_superuser)], response_model=UserPublic
+    "/", dependencies=[Depends(get_current_active_superCaregiver)], response_model=CaregiverPublic
 )
-def create_user(*, session: SessionDep, user_in: UserCreate) -> Any:
+def create_caregiver(*, session: SessionDep, caregiver_in: CaregiverCreate) -> Any:
     """
-    Create new user.
+    Create new caregiver.
     """
-    user = crud.get_user_by_email(session=session, email=user_in.email)
-    if user:
+    caregiver = crud.get_caregiver_by_email(session=session, email=caregiver_in.email)
+    if caregiver:
         raise HTTPException(
             status_code=400,
-            detail="The user with this email already exists in the system.",
+            detail="The caregiver with this email already exists in the system.",
         )
 
-    user = crud.create_user(session=session, user_create=user_in)
-    if settings.emails_enabled and user_in.email:
+    caregiver = crud.create_caregiver(session=session, caregiver_create=caregiver_in)
+    if settings.emails_enabled and caregiver_in.email:
         email_data = generate_new_account_email(
-            email_to=user_in.email, username=user_in.email, password=user_in.password
+            email_to=caregiver_in.email, caregivername=caregiver_in.email, password=caregiver_in.password
         )
         send_email(
-            email_to=user_in.email,
+            email_to=caregiver_in.email,
             subject=email_data.subject,
             html_content=email_data.html_content,
         )
-    return user
+    return caregiver
 
 
-@router.patch("/me", response_model=UserPublic)
-def update_user_me(
-    *, session: SessionDep, user_in: UserUpdateMe, current_user: CurrentUser
+@router.patch("/me", response_model=CaregiverPublic)
+def update_caregiver_me(
+    *, session: SessionDep, caregiver_in: CaregiverUpdateMe, current_caregiver: CurrentCaregiver
 ) -> Any:
     """
-    Update own user.
+    Update own caregiver.
     """
 
-    if user_in.email:
-        existing_user = crud.get_user_by_email(session=session, email=user_in.email)
-        if existing_user and existing_user.id != current_user.id:
+    if caregiver_in.email:
+        existing_caregiver = crud.get_caregiver_by_email(session=session, email=caregiver_in.email)
+        if existing_caregiver and existing_caregiver.id != current_caregiver.id:
             raise HTTPException(
-                status_code=409, detail="User with this email already exists"
+                status_code=409, detail="caregiver with this email already exists"
             )
-    user_data = user_in.model_dump(exclude_unset=True)
-    current_user.sqlmodel_update(user_data)
-    session.add(current_user)
+    caregiver_data = caregiver_in.model_dump(exclude_unset=True)
+    current_caregiver.sqlmodel_update(caregiver_data)
+    session.add(current_caregiver)
     session.commit()
-    session.refresh(current_user)
-    return current_user
+    session.refresh(current_caregiver)
+    return current_caregiver
 
 
 @router.patch("/me/password", response_model=Message)
 def update_password_me(
-    *, session: SessionDep, body: UpdatePassword, current_user: CurrentUser
+    *, session: SessionDep, body: UpdatePassword, current_caregiver: CurrentCaregiver
 ) -> Any:
     """
     Update own password.
     """
-    if not verify_password(body.current_password, current_user.hashed_password):
+    if not verify_password(body.current_password, current_caregiver.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect password")
     if body.current_password == body.new_password:
         raise HTTPException(
             status_code=400, detail="New password cannot be the same as the current one"
         )
     hashed_password = get_password_hash(body.new_password)
-    current_user.hashed_password = hashed_password
-    session.add(current_user)
+    current_caregiver.hashed_password = hashed_password
+    session.add(current_caregiver)
     session.commit()
     return Message(message="Password updated successfully")
 
 
-@router.get("/me", response_model=UserPublic)
-def read_user_me(current_user: CurrentUser) -> Any:
+@router.get("/me", response_model=CaregiverPublic)
+def read_caregiver_me(current_caregiver: CurrentCaregiver) -> Any:
     """
-    Get current user.
+    Get current caregiver.
     """
-    return current_user
+    return current_caregiver
 
 
 @router.delete("/me", response_model=Message)
-def delete_user_me(session: SessionDep, current_user: CurrentUser) -> Any:
+def delete_caregiver_me(session: SessionDep, current_caregiver: CurrentCaregiver) -> Any:
     """
-    Delete own user.
+    Delete own caregiver.
     """
-    if current_user.is_superuser:
+    if current_caregiver.is_supercaregiver:
         raise HTTPException(
-            status_code=403, detail="Super users are not allowed to delete themselves"
+            status_code=403, detail="Super caregivers are not allowed to delete themselves"
         )
-    statement = delete(Item).where(col(Item.owner_id) == current_user.id)
+    statement = delete(Patient).where(col(Patient.owner_id) == current_caregiver.id)
     session.exec(statement)  # type: ignore
-    session.delete(current_user)
+    session.delete(current_caregiver)
     session.commit()
-    return Message(message="User deleted successfully")
+    return Message(message="caregiver deleted successfully")
 
 
-@router.post("/signup", response_model=UserPublic)
-def register_user(session: SessionDep, user_in: UserRegister) -> Any:
+@router.post("/signup", response_model=CaregiverPublic)
+def register_caregiver(session: SessionDep, caregiver_in: CaregiverRegister) -> Any:
     """
-    Create new user without the need to be logged in.
+    Create new caregiver without the need to be logged in.
     """
-    user = crud.get_user_by_email(session=session, email=user_in.email)
-    if user:
+    caregiver = crud.get_caregiver_by_email(session=session, email=caregiver_in.email)
+    if caregiver:
         raise HTTPException(
             status_code=400,
-            detail="The user with this email already exists in the system",
+            detail="The caregiver with this email already exists in the system",
         )
-    user_create = UserCreate.model_validate(user_in)
-    user = crud.create_user(session=session, user_create=user_create)
-    return user
+    caregiver_create = CaregiverCreate.model_validate(caregiver_in)
+    caregiver = crud.create_caregiver(session=session, caregiver_create=caregiver_create)
+    return caregiver
 
 
-@router.get("/{user_id}", response_model=UserPublic)
-def read_user_by_id(
-    user_id: uuid.UUID, session: SessionDep, current_user: CurrentUser
+@router.get("/{caregiver_id}", response_model=CaregiverPublic)
+def read_caregiver_by_id(
+    caregiver_id: uuid.UUID, session: SessionDep, current_caregiver: CurrentCaregiver
 ) -> Any:
     """
-    Get a specific user by id.
+    Get a specific caregiver by id.
     """
-    user = session.get(User, user_id)
-    if user == current_user:
-        return user
-    if not current_user.is_superuser:
+    caregiver = session.get(caregiver, caregiver_id)
+    if caregiver == current_caregiver:
+        return caregiver
+    if not current_caregiver.is_supercaregiver:
         raise HTTPException(
             status_code=403,
-            detail="The user doesn't have enough privileges",
+            detail="The caregiver doesn't have enough privileges",
         )
-    return user
+    return caregiver
 
 
 @router.patch(
-    "/{user_id}",
-    dependencies=[Depends(get_current_active_superuser)],
-    response_model=UserPublic,
+    "/{caregiver_id}",
+    dependencies=[Depends(get_current_active_superCaregiver)],
+    response_model=CaregiverPublic,
 )
-def update_user(
+def update_caregiver(
     *,
     session: SessionDep,
-    user_id: uuid.UUID,
-    user_in: UserUpdate,
+    caregiver_id: uuid.UUID,
+    caregiver_in: CaregiverUpdate,
 ) -> Any:
     """
-    Update a user.
+    Update a caregiver.
     """
 
-    db_user = session.get(User, user_id)
-    if not db_user:
+    db_caregiver = session.get(caregiver, caregiver_id)
+    if not db_caregiver:
         raise HTTPException(
             status_code=404,
-            detail="The user with this id does not exist in the system",
+            detail="The caregiver with this id does not exist in the system",
         )
-    if user_in.email:
-        existing_user = crud.get_user_by_email(session=session, email=user_in.email)
-        if existing_user and existing_user.id != user_id:
+    if caregiver_in.email:
+        existing_caregiver = crud.get_caregiver_by_email(session=session, email=caregiver_in.email)
+        if existing_caregiver and existing_patient.id != caregiver_id:
             raise HTTPException(
-                status_code=409, detail="User with this email already exists"
+                status_code=409, detail="caregiver with this email already exists"
             )
 
-    db_user = crud.update_user(session=session, db_user=db_user, user_in=user_in)
-    return db_user
+    db_caregiver = crud.update_caregiver(session=session, db_caregiver=db_caregiver, caregiver_in=caregiver_in)
+    return db_caregiver
 
 
-@router.delete("/{user_id}", dependencies=[Depends(get_current_active_superuser)])
-def delete_user(
-    session: SessionDep, current_user: CurrentUser, user_id: uuid.UUID
+@router.delete("/{caregiver_id}", dependencies=[Depends(get_current_active_superCaregiver)])
+def delete_caregiver(
+    session: SessionDep, current_caregiver: CurrentCaregiver, caregiver_id: uuid.UUID
 ) -> Message:
     """
-    Delete a user.
+    Delete a caregiver.
     """
-    user = session.get(User, user_id)
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    if user == current_user:
+    caregiver = session.get(caregiver, caregiver_id)
+    if not caregiver:
+        raise HTTPException(status_code=404, detail="caregiver not found")
+    if caregiver == current_caregiver:
         raise HTTPException(
-            status_code=403, detail="Super users are not allowed to delete themselves"
+            status_code=403, detail="Super caregivers are not allowed to delete themselves"
         )
-    statement = delete(Item).where(col(Item.owner_id) == user_id)
+    statement = delete(Patient).where(col(Patient.owner_id) == caregiver_id)
     session.exec(statement)  # type: ignore
-    session.delete(user)
+    session.delete(caregiver)
     session.commit()
-    return Message(message="User deleted successfully")
+    return Message(message="caregiver deleted successfully")

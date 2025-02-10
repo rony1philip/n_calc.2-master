@@ -4,12 +4,13 @@ from typing import Any
 from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
-from app.models import Item, ItemCreate, User, UserCreate, UserUpdate
+from app.api.patient.models import Patient, PatientCreate
+from app.api.caregiver.models import Caregiver, CaregiverCreate, CaregiverUpdate
 
 
-def create_user(*, session: Session, user_create: UserCreate) -> User:
-    db_obj = User.model_validate(
-        user_create, update={"hashed_password": get_password_hash(user_create.password)}
+def create_caregiver(*, session: Session, caregiver_create: CaregiverCreate) -> Caregiver:
+    db_obj = Caregiver.model_validate(
+        caregiver_create, update={"hashed_password": get_password_hash(caregiver_create.password)}
     )
     session.add(db_obj)
     session.commit()
@@ -17,37 +18,37 @@ def create_user(*, session: Session, user_create: UserCreate) -> User:
     return db_obj
 
 
-def update_user(*, session: Session, db_user: User, user_in: UserUpdate) -> Any:
-    user_data = user_in.model_dump(exclude_unset=True)
+def update_caregiver(*, session: Session, db_caregiver: Caregiver, caregiver_in: CaregiverUpdate) -> Any:
+    caregiver_data = caregiver_in.model_dump(exclude_unset=True)
     extra_data = {}
-    if "password" in user_data:
-        password = user_data["password"]
+    if "password" in caregiver_data:
+        password = caregiver_data["password"]
         hashed_password = get_password_hash(password)
         extra_data["hashed_password"] = hashed_password
-    db_user.sqlmodel_update(user_data, update=extra_data)
-    session.add(db_user)
+    db_caregiver.sqlmodel_update(caregiver_data, update=extra_data)
+    session.add(db_caregiver)
     session.commit()
-    session.refresh(db_user)
-    return db_user
+    session.refresh(db_caregiver)
+    return db_caregiver
 
 
-def get_user_by_email(*, session: Session, email: str) -> User | None:
-    statement = select(User).where(User.email == email)
-    session_user = session.exec(statement).first()
-    return session_user
+def get_caregiver_by_email(*, session: Session, email: str) -> Caregiver | None:
+    statement = select(Caregiver).where(Caregiver.email == email)
+    session_caregiver = session.exec(statement).first()
+    return session_caregiver
 
 
-def authenticate(*, session: Session, email: str, password: str) -> User | None:
-    db_user = get_user_by_email(session=session, email=email)
-    if not db_user:
+def authenticate(*, session: Session, email: str, password: str) -> Caregiver | None:
+    db_caregiver = get_caregiver_by_email(session=session, email=email)
+    if not db_caregiver:
         return None
-    if not verify_password(password, db_user.hashed_password):
+    if not verify_password(password, db_caregiver.hashed_password):
         return None
-    return db_user
+    return db_caregiver
 
 
-def create_item(*, session: Session, item_in: ItemCreate, owner_id: uuid.UUID) -> Item:
-    db_item = Item.model_validate(item_in, update={"owner_id": owner_id})
+def create_item(*, session: Session, item_in: PatientCreate, owner_id: uuid.UUID) -> Patient:
+    db_item = Patient.model_validate(item_in, update={"owner_id": owner_id})
     session.add(db_item)
     session.commit()
     session.refresh(db_item)

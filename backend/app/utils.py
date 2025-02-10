@@ -47,8 +47,8 @@ def send_email(
         smtp_options["tls"] = True
     elif settings.SMTP_SSL:
         smtp_options["ssl"] = True
-    if settings.SMTP_USER:
-        smtp_options["user"] = settings.SMTP_USER
+    if settings.SMTP_CAREGIVER:
+        smtp_options["caregiver"] = settings.SMTP_CAREGIVER
     if settings.SMTP_PASSWORD:
         smtp_options["password"] = settings.SMTP_PASSWORD
     response = message.send(to=email_to, smtp=smtp_options)
@@ -67,13 +67,13 @@ def generate_test_email(email_to: str) -> EmailData:
 
 def generate_reset_password_email(email_to: str, email: str, token: str) -> EmailData:
     project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - Password recovery for user {email}"
+    subject = f"{project_name} - Password recovery for caregiver {email}"
     link = f"{settings.FRONTEND_HOST}/reset-password?token={token}"
     html_content = render_email_template(
         template_name="reset_password.html",
         context={
             "project_name": settings.PROJECT_NAME,
-            "username": email,
+            "caregivername": email,
             "email": email_to,
             "valid_hours": settings.EMAIL_RESET_TOKEN_EXPIRE_HOURS,
             "link": link,
@@ -83,15 +83,15 @@ def generate_reset_password_email(email_to: str, email: str, token: str) -> Emai
 
 
 def generate_new_account_email(
-    email_to: str, username: str, password: str
+    email_to: str, caregivername: str, password: str
 ) -> EmailData:
     project_name = settings.PROJECT_NAME
-    subject = f"{project_name} - New account for user {username}"
+    subject = f"{project_name} - New account for caregiver {caregivername}"
     html_content = render_email_template(
         template_name="new_account.html",
         context={
             "project_name": settings.PROJECT_NAME,
-            "username": username,
+            "caregivername": caregivername,
             "password": password,
             "email": email_to,
             "link": settings.FRONTEND_HOST,

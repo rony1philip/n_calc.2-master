@@ -1,11 +1,12 @@
 from sqlmodel import Session, create_engine, select
 
-from app import crud
+from app.crud import create_caregiver
 from app.core.config import settings
-from app.api.user import User, UserCreate
+from app.api.caregiver.models import Caregiver, CaregiverCreate
 
 engine = create_engine(str(settings.SQLALCHEMY_DATABASE_URI))
-
+#engine = create_engine("postgresql+psycopg2://scott:tiger@localhost:5432/postgres"
+#, pool_pre_ping=True)
 
 # make sure all SQLModel models are imported (app.models) before initializing DB
 # otherwise, SQLModel might fail to initialize relationships properly
@@ -20,14 +21,14 @@ def init_db(session: Session) -> None:
 
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
-
-    user = session.exec(
-        select(User).where(User.email == settings.FIRST_SUPERUSER)
+    return
+    caregiver = session.exec(
+        select(Caregiver).where(Caregiver.email == settings.FIRST_SUPERUSER)
     ).first()
-    if not user:
-        user_in = UserCreate(
+    if not caregiver:
+        Caregiver_in = CaregiverCreate(
             email=settings.FIRST_SUPERUSER,
             password=settings.FIRST_SUPERUSER_PASSWORD,
-            is_superuser=True,
+            is_superCaregiver=True,
         )
-        user = crud.create_user(session=session, user_create=user_in)
+        caregiver = CaregiverCreate(session=session, Caregiver_create=Caregiver_in)

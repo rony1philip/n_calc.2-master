@@ -6,11 +6,12 @@ from fastapi.responses import HTMLResponse
 from fastapi.security import OAuth2PasswordRequestForm
 
 from app import crud
-from app.api.deps import CurrentUser, SessionDep, get_current_active_superuser
+from app.api.deps import CurrentCaregiver, SessionDep, get_current_active_superCaregiver
 from app.core import security
 from app.core.config import settings
 from app.core.security import get_password_hash
-from app.models import Message, NewPassword, Token, UserPublic
+from app.models import Message, NewPassword, Token
+from app.api.caregiver.models import CaregiverPublic
 from app.utils import (
     generate_password_reset_token,
     generate_reset_password_email,
@@ -28,27 +29,27 @@ def login_access_token(
     """
     OAuth2 compatible token login, get an access token for future requests
     """
-    user = crud.authenticate(
+    caregiver = crud.authenticate(
         session=session, email=form_data.username, password=form_data.password
     )
-    if not user:
+    if not caregiver:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
-    elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+    elif not caregiver.is_active:
+        raise HTTPException(status_code=400, detail="Inactive caregiver")
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     return Token(
         access_token=security.create_access_token(
-            user.id, expires_delta=access_token_expires
+            caregiver.id, expires_delta=access_token_expires
         )
     )
 
 
-@router.post("/login/test-token", response_model=UserPublic)
-def test_token(current_user: CurrentUser) -> Any:
+@router.post("/login/test-token", response_model=CaregiverPublic)
+def test_token(current_caregiver: CurrentCaregiver) -> Any:
     """
     Test access token
     """
-    return current_user
+    return current_caregiver
 
 
 @router.post("/password-recovery/{email}")
@@ -56,19 +57,19 @@ def recover_password(email: str, session: SessionDep) -> Message:
     """
     Password Recovery
     """
-    user = crud.get_user_by_email(session=session, email=email)
+    caregiver = crud.get_caregiver_by_email(session=session, email=email)
 
-    if not user:
+    if not caregiver:
         raise HTTPException(
             status_code=404,
-            detail="The user with this email does not exist in the system.",
+            detail="The caregiver with this email does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
     email_data = generate_reset_password_email(
-        email_to=user.email, email=email, token=password_reset_token
+        email_to=caregiver.email, email=email, token=password_reset_token
     )
     send_email(
-        email_to=user.email,
+        email_to=caregiver.email,
         subject=email_data.subject,
         html_content=email_data.html_content,
     )
@@ -83,40 +84,40 @@ def reset_password(session: SessionDep, body: NewPassword) -> Message:
     email = verify_password_reset_token(token=body.token)
     if not email:
         raise HTTPException(status_code=400, detail="Invalid token")
-    user = crud.get_user_by_email(session=session, email=email)
-    if not user:
+    caregiver = crud.get_caregiver_by_email(session=session, email=email)
+    if not caregiver:
         raise HTTPException(
             status_code=404,
-            detail="The user with this email does not exist in the system.",
+            detail="The caregiver with this email does not exist in the system.",
         )
-    elif not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
+    elif not caregiver.is_active:
+        raise HTTPException(status_code=400, detail="Inactive caregiver")
     hashed_password = get_password_hash(password=body.new_password)
-    user.hashed_password = hashed_password
-    session.add(user)
+    caregiver.hashed_password = hashed_password
+    session.add(caregiver)
     session.commit()
     return Message(message="Password updated successfully")
 
 
 @router.post(
     "/password-recovery-html-content/{email}",
-    dependencies=[Depends(get_current_active_superuser)],
+    dependencies=[Depends(get_current_active_superCaregiver)],
     response_class=HTMLResponse,
 )
 def recover_password_html_content(email: str, session: SessionDep) -> Any:
     """
     HTML Content for Password Recovery
     """
-    user = crud.get_user_by_email(session=session, email=email)
+    caregiver = crud.get_caregiver_by_email(session=session, email=email)
 
-    if not user:
+    if not caregiver:
         raise HTTPException(
             status_code=404,
-            detail="The user with this username does not exist in the system.",
+            detail="The caregiver with this caregivername does not exist in the system.",
         )
     password_reset_token = generate_password_reset_token(email=email)
     email_data = generate_reset_password_email(
-        email_to=user.email, email=email, token=password_reset_token
+        email_to=caregiver.email, email=email, token=password_reset_token
     )
 
     return HTMLResponse(
