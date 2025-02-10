@@ -5,7 +5,7 @@ from sqlmodel import Session, select
 
 from app.core.security import get_password_hash, verify_password
 from app.api.patient.models import Patient, PatientCreate
-from api.caregiver.models import Caregiver, CaregiverCreate, CaregiverUpdate
+from app.api.caregiver.models import Caregiver, CaregiverCreate, CaregiverUpdate
 
 
 def create_caregiver(*, session: Session, caregiver_create: CaregiverCreate) -> Caregiver:

@@ -106,7 +106,7 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER?Variable not set}
       - POSTGRES_PASSWORD=postgres
-      - SENTRY_DSN=${SENTRY_DSN}
+      - SENPOSTGRES_SERVERTRY_DSN=${SENTRY_DSN}
 
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/utils/health-check/"]

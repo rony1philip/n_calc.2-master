@@ -21,7 +21,7 @@ def init_db(session: Session) -> None:
 
     # This works because the models are already imported and registered from app.models
     # SQLModel.metadata.create_all(engine)
-
+    return
     caregiver = session.exec(
         select(Caregiver).where(Caregiver.email == settings.FIRST_SUPERUSER)
     ).first()

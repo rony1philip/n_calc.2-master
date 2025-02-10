@@ -2,7 +2,7 @@ import uuid
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, ForeignKey, SQLModel
 
-from sqlalchemy.orm import mapped_column
+from sqlalchemy.orm import mapped_column, Mapped
 
 from sqlmodel import Field, Relationship, SQLModel
 from typing import Optional
@@ -41,7 +41,6 @@ class Patient(PatientBase, table=True, extend_existing=True):
     __tablename__ = "patient_table"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     title: str = Field(max_length=255)
-    owner_id: uuid.UUID = mapped_column(ForeignKey("parent_table.id"))
     age:int
     weight:int
     gender:int
@@ -51,7 +50,7 @@ class Patient(PatientBase, table=True, extend_existing=True):
     weight:int
     height:float
     activity_level:int 
-    caregiver:Optional["app.api.caregiver.models.Caregiver"] = Relationship(back_populates="patient")
+    caregiver_id: Optional[uuid.UUID] = Field(foreign_key="caregiver.id")
    
 
 

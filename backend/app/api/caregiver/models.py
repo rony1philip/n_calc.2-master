@@ -1,5 +1,6 @@
 from pydantic import EmailStr
 from sqlmodel import Field, Relationship, SQLModel
+from sqlalchemy.orm import Mapped
 import uuid
 
 
@@ -40,11 +41,10 @@ class UpdatePassword(SQLModel):
 
 # Database model, database table inferred from class name
 class Caregiver(CaregiverBase, table=True):
-    __tablename__ = "caregiver_table"
+    __tablename__ = "caregiver"
     __table_args__ = {'extend_existing': True} 
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     hashed_password: str
-    patients: list["app.api.patient.models.Patient"] = Relationship(back_populates="caregiver", cascade_delete=True)
 
 
 # Properties to return via API, id is always required
