@@ -25,7 +25,7 @@ import {
   Center,
 } from "@chakra-ui/react";
 import PatientRegisterForm from "../../components/Common/PatientRegisterForm";
-import { Search2Icon } from "@chakra-ui/icons";
+import PatientsManagement from "../../components/Common/PatientsData";
 import {
   Link as RouterLink,
   createFileRoute,
@@ -97,15 +97,8 @@ function Dashboard() {
           </Box>
           </Flex>
         
-          <Modal isOpen={isOpen} onClose={onClose}>
-            <ModalOverlay />
-            <ModalContent>
-              <ModalCloseButton />
-              <ModalBody>
-                <PatientRegisterForm></PatientRegisterForm>
-              </ModalBody>
-            </ModalContent>
-          </Modal>
+            <PatientsManagement></PatientsManagement>
+              
         </Box>
       </Container>
     </>

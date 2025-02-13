@@ -26,7 +26,7 @@ const itemsSearchSchema = z.object({
 })
 
 export const Route = createFileRoute("/_layout/items")({
-  component: Items,
+  component: Patient,
   validateSearch: (search) => itemsSearchSchema.parse(search),
 })
 
@@ -40,7 +40,7 @@ function getItemsQueryOptions({ page }: { page: number }) {
   }
 }
 
-function ItemsTable() {
+function PatientsTable() {
   const queryClient = useQueryClient()
   const { page } = Route.useSearch()
   const navigate = useNavigate({ from: Route.fullPath })
@@ -121,7 +121,7 @@ function ItemsTable() {
   )
 }
 
-function Items() {
+function Patient() {
   return (
     <Container maxW="full">
       <Heading size="lg" textAlign={{ base: "center", md: "left" }} pt={12}>
@@ -129,7 +129,7 @@ function Items() {
       </Heading>
 
       <Navbar type={"Item"} addModalAs={AddItem} />
-      <ItemsTable />
+      <PatientsTable />
     </Container>
   )
 }
