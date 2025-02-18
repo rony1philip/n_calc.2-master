@@ -47,9 +47,9 @@ def authenticate(*, session: Session, email: str, password: str) -> Caregiver | 
     return db_caregiver
 
 
-def create_item(*, session: Session, item_in: PatientCreate, owner_id: uuid.UUID) -> Patient:
-    db_item = Patient.model_validate(item_in, update={"owner_id": owner_id})
-    session.add(db_item)
+def create_patient(*, session: Session, patient_in: PatientCreate, owner_id: uuid.UUID) -> Patient:
+    db_patient = Patient.model_validate(patient_in, update={"owner_id": owner_id})
+    session.add(db_patient)
     session.commit()
-    session.refresh(db_item)
-    return db_item
+    session.refresh(db_patient)
+    return db_patient

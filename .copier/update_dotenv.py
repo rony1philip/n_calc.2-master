@@ -11,7 +11,7 @@ env_path = root_path / ".env"
 env_content = env_path.read_text()
 lines = []
 for line in env_content.splitlines():
-    for key, value in answers.items():
+    for key, value in answers.patients():
         upper_key = key.upper()
         if line.startswith(f"{upper_key}="):
             if " " in value:

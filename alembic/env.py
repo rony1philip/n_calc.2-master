@@ -18,10 +18,14 @@ fileConfig(config.config_file_name)
 # target_metadata = mymodel.Base.metadata
 # target_metadata = None
 
-from app.models import SQLModel  # noqa
+from app.models import SQLModel   # noqa
+from app.api.caregiver.models import Caregiver
+from app.api.patient.models import Patient
 from app.core.config import settings # noqa
 
 target_metadata = SQLModel.metadata
+target_metadata_caregiver = Caregiver.metadata
+target_metadata_patient = Patient.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -47,7 +51,7 @@ def run_migrations_offline():
     """
     url = get_url()
     context.configure(
-        url=url, target_metadata=target_metadata, literal_binds=True, compare_type=True
+        url=url, target_metadata=target_metadata, literal_binds=True, compare_type=True, target_metadata_caregiver=target_metadata_caregiver, target_metadata_patient=target_metadata_patient
     )
 
     with context.begin_transaction():

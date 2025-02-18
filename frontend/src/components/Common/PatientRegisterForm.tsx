@@ -52,9 +52,15 @@ export default function PatientRegisterForm() {
     lastNameAutoFocus: false,
     phoneNumber: "",
     phoneNumberAutoFocus: false,
+    gender: "",
+    genderAutoFocus: false,
+    birthDate: "",
+    birthDateAutoFocus: false,
+    about: "",
+    aboutAutoFocus: false,
   });
 
-  const isForm1Invalid = () => {
+  const isFormInvalid = () => {
     const isEmail = (email: string) =>
       /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
     const isPhone = (phoneNumber: string) => 
@@ -69,7 +75,7 @@ export default function PatientRegisterForm() {
 const Form1 = () => {
   
   return (
-    <> <FormControl isInvalid={isForm1Invalid()} mr="5%">
+    <> <FormControl isInvalid={isFormInvalid()} mr="5%">
       <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
         Register Patient{" "}
       </Heading>
@@ -140,7 +146,20 @@ const Form1 = () => {
         <FormLabel htmlFor="phone" fontWeight={"normal"}>
           Phone Number
         </FormLabel>
-        <Input placeholder="Phone Number" id="phone" type="phone" /> 
+        <Input placeholder="Phone Number" id="phone" type="phone" 
+            value={formData.phoneNumber} 
+            autoFocus={formData.phoneNumberAutoFocus}
+            onChange={(e) => {
+              e.preventDefault();
+              setFormData({
+                ...formData,
+                phoneNumber: e.target.value,
+                phoneNumberAutoFocus: true,
+                firstNameAutoFocus: false,
+                lastNameAutoFocus: false,
+                emailAutoFocus: false,
+              });
+            }} /> 
         <FormErrorMessage>please check that all fields are valid</FormErrorMessage>
       </FormControl>
     
@@ -177,6 +196,19 @@ const Form2 = () => {
             size="sm"
             w="full"
             rounded="md"
+            value={formData.gender} 
+            autoFocus={formData.genderAutoFocus}
+            onChange={(e) => {
+              e.preventDefault();
+              setFormData({
+                ...formData,
+                gender: e.target.value,
+                genderAutoFocus: true,
+                firstNameAutoFocus: false,
+                lastNameAutoFocus: false,
+                emailAutoFocus: false,
+              });
+            }}
           >
             <option>Female</option>
             <option>Male</option>
@@ -193,7 +225,7 @@ const Form2 = () => {
             }}
             mt="2%"
           >
-            Age
+            Birth Date
           </FormLabel>
           <NumberInput
             focusBorderColor="brand.400"
@@ -201,9 +233,10 @@ const Form2 = () => {
             size="sm"
             w="full"
             rounded="md"
-            defaultValue={15}
-            min={10}
-            max={20}
+            defaultValue={1999}
+           
+           
+            
           >
             <NumberInputField />
             <NumberInputStepper>
@@ -232,6 +265,17 @@ const Form2 = () => {
           fontSize={{
             sm: "sm",
           }}
+          value={formData.phoneNumber}
+          autoFocus={formData.phoneNumberAutoFocus}
+          onChange={(e) => {
+            e.preventDefault();
+            setFormData({
+              ...formData,
+              about: e.target.value,
+              aboutAutoFocus: true,
+              firstNameAutoFocus: false,
+              lastNameAutoFocus: false,
+            });}}
         />
         <FormHelperText>Brief description of your patient.</FormHelperText>
       </FormControl>
@@ -280,7 +324,7 @@ const Form2 = () => {
                 isDisabled={step === 2}
                 onClick={(e) => {
                   e.preventDefault()
-                  if ((step == 1) && isForm1Invalid()) {
+                  if ((step == 1) && isFormInvalid()) {
                      return // checks if this is valid
                   }
                   setStep(step + 1);

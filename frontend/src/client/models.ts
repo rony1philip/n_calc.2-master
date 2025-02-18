@@ -11,25 +11,37 @@ export type HTTPValidationError = {
   detail?: Array<ValidationError>
 }
 
-export type ItemCreate = {
+export type PatientCreate = {
   title: string
   description?: string | null
 }
 
-export type ItemPublic = {
+export type PatientPublic = {
   title: string
   description?: string | null
   id: string
   owner_id: string
+  about: string
+  email: string
+  first_name: string
+  last_name: string
+  phon_number: string
+  age: number
+  weight: number
+  gender: string
+  height: number
+  activity_level:number
+  created_at: number
 }
 
-export type ItemUpdate = {
+
+export type PatientUpdate = {
   title?: string | null
   description?: string | null
 }
 
-export type ItemsPublic = {
-  data: Array<ItemPublic>
+export type PatientsPublic = {
+  data: Array<PatientPublic>
   count: number
 }
 

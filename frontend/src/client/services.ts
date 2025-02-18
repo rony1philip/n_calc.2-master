@@ -14,10 +14,10 @@ import type {
   UsersPublic,
   UserUpdate,
   UserUpdateMe,
-  ItemCreate,
-  ItemPublic,
-  ItemsPublic,
-  ItemUpdate,
+  PatientCreate,
+  PatientPublic,
+  PatientsPublic,
+  PatientUpdate,
 } from "./models"
 
 export type TDataLoginAccessToken = {
@@ -400,34 +400,34 @@ export class UtilsService {
   }
 }
 
-export type TDataReadItems = {
+export type TDataReadPatients = {
   limit?: number
   skip?: number
 }
-export type TDataCreateItem = {
-  requestBody: ItemCreate
+export type TDataCreatePatient = {
+  requestBody: PatientCreate
 }
-export type TDataReadItem = {
+export type TDataReadPatient = {
   id: string
 }
-export type TDataUpdateItem = {
+export type TDataUpdatePatient = {
   id: string
-  requestBody: ItemUpdate
+  requestBody: PatientUpdate
 }
-export type TDataDeleteItem = {
+export type TDataDeletePatient = {
   id: string
 }
 
-export class ItemsService {
+export class PatientsService {
   /**
    * Read Items
    * Retrieve items.
    * @returns ItemsPublic Successful Response
    * @throws ApiError
    */
-  public static readItems(
-    data: TDataReadItems = {},
-  ): CancelablePromise<ItemsPublic> {
+  public static readPatients(
+    data: TDataReadPatients = {},
+  ): CancelablePromise<PatientsPublic> {
     const { limit = 100, skip = 0 } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -448,9 +448,9 @@ export class ItemsService {
    * @returns ItemPublic Successful Response
    * @throws ApiError
    */
-  public static createItem(
-    data: TDataCreateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static createPatient(
+    data: TDataCreatePatient,
+  ): CancelablePromise<PatientPublic> {
     const { requestBody } = data
     return __request(OpenAPI, {
       method: "POST",
@@ -469,7 +469,7 @@ export class ItemsService {
    * @returns ItemPublic Successful Response
    * @throws ApiError
    */
-  public static readItem(data: TDataReadItem): CancelablePromise<ItemPublic> {
+  public static readPatient(data: TDataReadPatient): CancelablePromise<PatientPublic> {
     const { id } = data
     return __request(OpenAPI, {
       method: "GET",
@@ -489,9 +489,9 @@ export class ItemsService {
    * @returns ItemPublic Successful Response
    * @throws ApiError
    */
-  public static updateItem(
-    data: TDataUpdateItem,
-  ): CancelablePromise<ItemPublic> {
+  public static updatePatient(
+    data: TDataUpdatePatient,
+  ): CancelablePromise<PatientPublic> {
     const { id, requestBody } = data
     return __request(OpenAPI, {
       method: "PUT",
@@ -513,7 +513,7 @@ export class ItemsService {
    * @returns Message Successful Response
    * @throws ApiError
    */
-  public static deleteItem(data: TDataDeleteItem): CancelablePromise<Message> {
+  public static deletePatient(data: TDataDeletePatient): CancelablePromise<Message> {
     const { id } = data
     return __request(OpenAPI, {
       method: "DELETE",

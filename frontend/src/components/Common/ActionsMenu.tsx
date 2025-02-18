@@ -9,14 +9,14 @@ import {
 import { BsThreeDotsVertical } from "react-icons/bs"
 import { FiEdit, FiTrash } from "react-icons/fi"
 
-import type { ItemPublic, UserPublic } from "../../client"
+import type { PatientPublic, UserPublic } from "../../client"
 import EditUser from "../Admin/EditUser"
-import EditItem from "../Items/EditItem"
+import EditPatient from "../Items/EditItem"
 import Delete from "./DeleteAlert"
 
 interface ActionsMenuProps {
   type: string
-  value: ItemPublic | UserPublic
+  value: PatientPublic | UserPublic
   disabled?: boolean
 }
 
@@ -55,8 +55,8 @@ const ActionsMenu = ({ type, value, disabled }: ActionsMenuProps) => {
             onClose={editUserModal.onClose}
           />
         ) : (
-          <EditItem
-            item={value as ItemPublic}
+          <EditPatient
+            patient={value as PatientPublic}
             isOpen={editUserModal.isOpen}
             onClose={editUserModal.onClose}
           />

@@ -59,6 +59,7 @@ class Patient(PatientBase, table=True, extend_existing=True):
    
 
 
+
   
     
     """patient : Patient | None = Relationship(back_populates="patient_menu")"""

@@ -15,28 +15,28 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useEffect } from "react"
 import { z } from "zod"
 
-import { ItemsService } from "../../client"
+import { PatientsService } from "../../client"
 import ActionsMenu from "../../components/Common/ActionsMenu"
 import Navbar from "../../components/Common/Navbar"
-import AddItem from "../../components/Items/AddItem"
+import AddPatient from "../../components/Items/AddItem"
 import { PaginationFooter } from "../../components/Common/PaginationFooter.tsx"
 
-const itemsSearchSchema = z.object({
+const patientsSearchSchema = z.object({
   page: z.number().catch(1),
 })
 
 export const Route = createFileRoute("/_layout/items")({
   component: Patient,
-  validateSearch: (search) => itemsSearchSchema.parse(search),
+  validateSearch: (search) => patientsSearchSchema.parse(search),
 })
 
 const PER_PAGE = 5
 
-function getItemsQueryOptions({ page }: { page: number }) {
+function getPatientsQueryOptions({ page }: { page: number }) {
   return {
     queryFn: () =>
-      ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
-    queryKey: ["items", { page }],
+      PatientsService.readPatients({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+    queryKey: ["patients", { page }],
   }
 }
 
@@ -48,20 +48,20 @@ function PatientsTable() {
     navigate({ search: (prev) => ({ ...prev, page }) })
 
   const {
-    data: items,
+    data: patients,
     isPending,
     isPlaceholderData,
   } = useQuery({
-    ...getItemsQueryOptions({ page }),
+    ...getPatientsQueryOptions({ page }),
     placeholderData: (prevData) => prevData,
   })
 
-  const hasNextPage = !isPlaceholderData && items?.data.length === PER_PAGE
+  const hasNextPage = !isPlaceholderData && patients?.data.length === PER_PAGE
   const hasPreviousPage = page > 1
 
   useEffect(() => {
     if (hasNextPage) {
-      queryClient.prefetchQuery(getItemsQueryOptions({ page: page + 1 }))
+      queryClient.prefetchQuery(getPatientsQueryOptions({ page: page + 1 }))
     }
   }, [page, queryClient, hasNextPage])
 
@@ -89,21 +89,21 @@ function PatientsTable() {
             </Tbody>
           ) : (
             <Tbody>
-              {items?.data.map((item) => (
-                <Tr key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                  <Td>{item.id}</Td>
+              {patients?.data.map((patient) => (
+                <Tr key={patient.id} opacity={isPlaceholderData ? 0.5 : 1}>
+                  <Td>{patient.id}</Td>
                   <Td isTruncated maxWidth="150px">
-                    {item.title}
+                    {patient.title}
                   </Td>
                   <Td
-                    color={!item.description ? "ui.dim" : "inherit"}
+                    color={!patient.description ? "ui.dim" : "inherit"}
                     isTruncated
                     maxWidth="150px"
                   >
-                    {item.description || "N/A"}
+                    {patient.description || "N/A"}
                   </Td>
                   <Td>
-                    <ActionsMenu type={"Item"} value={item} />
+                    <ActionsMenu type={"Patient"} value={patient} />
                   </Td>
                 </Tr>
               ))}
@@ -125,10 +125,10 @@ function Patient() {
   return (
     <Container maxW="full">
       <Heading size="lg" textAlign={{ base: "center", md: "left" }} pt={12}>
-        Items Management
+        Patients Management
       </Heading>
 
-      <Navbar type={"Item"} addModalAs={AddItem} />
+      <Navbar type={"Patient"} addModalAs={AddPatient} />
       <PatientsTable />
     </Container>
   )

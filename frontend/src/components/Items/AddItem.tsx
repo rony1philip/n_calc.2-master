@@ -15,16 +15,16 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { type SubmitHandler, useForm } from "react-hook-form"
 
-import { type ApiError, type ItemCreate, ItemsService } from "../../client"
+import { type ApiError, type PatientCreate, PatientsService as PatientService } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface AddItemProps {
+interface AddPatientProps {
   isOpen: boolean
   onClose: () => void
 }
 
-const AddItem = ({ isOpen, onClose }: AddItemProps) => {
+const AddPatient = ({ isOpen, onClose }: AddPatientProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -32,7 +32,7 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
     handleSubmit,
     reset,
     formState: { errors, isSubmitting },
-  } = useForm<ItemCreate>({
+  } = useForm<PatientCreate>({
     mode: "onBlur",
     criteriaMode: "all",
     defaultValues: {
@@ -42,10 +42,10 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemCreate) =>
-      ItemsService.createItem({ requestBody: data }),
+    mutationFn: (data: PatientCreate) =>
+      PatientService.createPatient({ requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item created successfully.", "success")
+      showToast("Success!", "Patient created successfully.", "success")
       reset()
       onClose()
     },
@@ -53,11 +53,11 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
       handleError(err, showToast)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["Patients"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemCreate> = (data) => {
+  const onSubmit: SubmitHandler<PatientCreate> = (data) => {
     mutation.mutate(data)
   }
 
@@ -71,7 +71,7 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Add Item</ModalHeader>
+          <ModalHeader>Add Patient</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isRequired isInvalid={!!errors.title}>
@@ -111,4 +111,4 @@ const AddItem = ({ isOpen, onClose }: AddItemProps) => {
   )
 }
 
-export default AddItem
+export default AddPatient

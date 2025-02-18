@@ -14,26 +14,26 @@ import {
   import { useEffect, useState } from "react"
   import { z } from "zod"
   
-  import { ItemsService } from "../../client"
+  import { PatientsService } from "../../client"
   import ActionsMenu from "../../components/Common/ActionsMenu"
   import Navbar from "../../components/Common/Navbar"
-  import AddItem from "../../components/Items/AddItem"
+  import AddPatient from "../../components/Items/AddItem"
   import { PaginationFooter } from "../../components/Common/PaginationFooter.tsx"
   
-  const itemsSearchSchema = z.object({
+  const patientsSearchSchema = z.object({
     page: z.number().catch(1),
   })
   
   const validSearch = {
-    validateSearch: (search) => itemsSearchSchema.parse(search),
+    validateSearch: (search) => patientsSearchSchema.parse(search),
   }
   
   const PER_PAGE = 5
   
-  function getItemsQueryOptions({ page }) {
+  function getPatientsQueryOptions({ page }) {
     return {
-      queryFn: () => ItemsService.readItems({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
-      queryKey: ["items", { page }],
+      queryFn: () => PatientsService.readPatients({ skip: (page - 1) * PER_PAGE, limit: PER_PAGE }),
+      queryKey: ["patient", { page }],
     }
   }
   
@@ -41,20 +41,20 @@ import {
     const queryClient = useQueryClient()
   
     const {
-      data: items,
+      data: Patients,
       isPending,
       isPlaceholderData,
     } = useQuery({
-      ...getItemsQueryOptions({ page }),
+      ...getPatientsQueryOptions({ page }),
       placeholderData: (prevData) => prevData,
     })
   
-    const hasNextPage = !isPlaceholderData && items?.data.length === PER_PAGE
+    const hasNextPage = !isPlaceholderData && Patients?.data.length === PER_PAGE
     const hasPreviousPage = page > 1
   
     useEffect(() => {
       if (hasNextPage) {
-        queryClient.prefetchQuery(getItemsQueryOptions({ page: page + 1 }))
+        queryClient.prefetchQuery(getPatientsQueryOptions({ page: page + 1 }))
       }
     }, [page, queryClient, hasNextPage])
   
@@ -82,15 +82,15 @@ import {
               </Tbody>
             ) : (
               <Tbody>
-                {items?.data.map((item) => (
-                  <Tr key={item.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                    <Td>{item.id}</Td>
-                    <Td isTruncated maxWidth="150px">{item.title}</Td>
-                    <Td color={!item.description ? "ui.dim" : "inherit"} isTruncated maxWidth="150px">
-                      {item.description || "N/A"}
+                {Patients?.data.map((patient) => (
+                  <Tr key={patient.id} opacity={isPlaceholderData ? 0.5 : 1}>
+                    <Td>{patient.id}</Td>
+                    <Td isTruncated maxWidth="150px">{patient.title}</Td>
+                    <Td color={!patient.description ? "ui.dim" : "inherit"} isTruncated maxWidth="150px">
+                      {patient.description || "N/A"}
                     </Td>
                     <Td>
-                      <ActionsMenu type={"Item"} value={item} />
+                      <ActionsMenu type={"Patient"} value={patient} />
                     </Td>
                   </Tr>
                 ))}
@@ -109,9 +109,9 @@ import {
     return (
       <Container maxW="full">
         <Heading size="lg" textAlign={{ base: "center", md: "left" }} pt={12}>
-          Items Management
+        Patients Management
         </Heading>
-        <Navbar type={"Item"} addModalAs={AddItem} />
+        <Navbar type={"Patient"} addModalAs={AddPatient} />
         <PatientsTable page={page} setPage={setPage} />
       </Container>
     )

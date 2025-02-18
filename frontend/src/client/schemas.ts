@@ -60,9 +60,74 @@ export const $HTTPValidationError = {
   },
 } as const
 
-export const $ItemCreate = {
+export const $PatientCreate = {
   properties: {
-    title: {
+      about:{
+        type: "string",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      email:{
+        type: "string",
+        isRequired: true,
+        maxLength: 40,
+        minLength: 1,
+      },
+      first_name:{
+        type: "string",
+        isRequired: true,
+        maxLength: 15,
+        minLength: 20,
+      },
+      last_name:{
+        type: "string",
+        isRequired: true,
+        maxLength: 20,
+        minLength: 1,
+      },
+      phon_number:{
+        type: "string",
+        isRequired: true,
+        maxLength: 20,
+        minLength: 1,
+      },
+      age:{ type: "number",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      weight:{
+        type: "string",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      gender:{
+        type: "string",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      height:{
+        type: "number",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      activity_level:{
+        type: "string",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      created_at:{
+        type: "string",
+        isRequired: true,
+        maxLength: 255,
+        minLength: 1,
+      },
+      title: {
       type: "string",
       isRequired: true,
       maxLength: 255,
@@ -83,8 +148,42 @@ export const $ItemCreate = {
   },
 } as const
 
-export const $ItemPublic = {
+export const $PatientPublic = {
   properties: {
+    age:{ type: "number",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    weight:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    gender:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    height:{
+      type: "number",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    activity_level:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    created_at:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
     title: {
       type: "string",
       isRequired: true,
@@ -113,11 +212,49 @@ export const $ItemPublic = {
       isRequired: true,
       format: "uuid",
     },
-  },
+  },}
 } as const
 
-export const $ItemUpdate = {
+
+
+
+
+export const $PatientUpdate = {
   properties: {
+    age:{ type: "number",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    weight:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    gender:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    height:{
+      type: "number",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    activity_level:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
+    },
+    created_at:{
+      type: "string",
+      isRequired: true,
+      maxLength: 255,
+      minLength: 1,
     title: {
       type: "any-of",
       contains: [
@@ -143,15 +280,15 @@ export const $ItemUpdate = {
         },
       ],
     },
-  },
+  },}
 } as const
 
-export const $ItemsPublic = {
+export const $PatientsPublic = {
   properties: {
     data: {
       type: "array",
       contains: {
-        type: "ItemPublic",
+        type: "PatientPublic",
       },
       isRequired: true,
     },

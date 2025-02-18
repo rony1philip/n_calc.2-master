@@ -17,20 +17,20 @@ import { type SubmitHandler, useForm } from "react-hook-form"
 
 import {
   type ApiError,
-  type ItemPublic,
-  type ItemUpdate,
-  ItemsService,
+  type PatientPublic,
+  type PatientUpdate,
+  PatientsService,
 } from "../../client"
 import useCustomToast from "../../hooks/useCustomToast"
 import { handleError } from "../../utils"
 
-interface EditItemProps {
-  item: ItemPublic
+interface EditPatietProps {
+  patient: PatientPublic
   isOpen: boolean
   onClose: () => void
 }
 
-const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
+const EditPatient = ({ patient: patient, isOpen, onClose }: EditPatietProps) => {
   const queryClient = useQueryClient()
   const showToast = useCustomToast()
   const {
@@ -38,28 +38,28 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
     handleSubmit,
     reset,
     formState: { isSubmitting, errors, isDirty },
-  } = useForm<ItemUpdate>({
+  } = useForm<PatientUpdate>({
     mode: "onBlur",
     criteriaMode: "all",
-    defaultValues: item,
+    defaultValues: patient,
   })
 
   const mutation = useMutation({
-    mutationFn: (data: ItemUpdate) =>
-      ItemsService.updateItem({ id: item.id, requestBody: data }),
+    mutationFn: (data: PatientUpdate) =>
+      PatientsService.updatePatient({ id: patient.id, requestBody: data }),
     onSuccess: () => {
-      showToast("Success!", "Item updated successfully.", "success")
+      showToast("Success!", "Patient updated successfully.", "success")
       onClose()
     },
     onError: (err: ApiError) => {
       handleError(err, showToast)
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ["items"] })
+      queryClient.invalidateQueries({ queryKey: ["ptients"] })
     },
   })
 
-  const onSubmit: SubmitHandler<ItemUpdate> = async (data) => {
+  const onSubmit: SubmitHandler<PatientUpdate> = async (data) => {
     mutation.mutate(data)
   }
 
@@ -78,7 +78,7 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
       >
         <ModalOverlay />
         <ModalContent as="form" onSubmit={handleSubmit(onSubmit)}>
-          <ModalHeader>Edit Item</ModalHeader>
+          <ModalHeader>Edit ptient</ModalHeader>
           <ModalCloseButton />
           <ModalBody pb={6}>
             <FormControl isInvalid={!!errors.title}>
@@ -121,4 +121,4 @@ const EditItem = ({ item, isOpen, onClose }: EditItemProps) => {
   )
 }
 
-export default EditItem
+export default EditPatient
