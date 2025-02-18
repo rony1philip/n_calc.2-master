@@ -41,18 +41,22 @@ class Patient(PatientBase, table=True, extend_existing=True):
     __tablename__ = "patient_table"
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
     title: str = Field(max_length=255)
-    age:int
-    weight:int
-    gender:int
-    height:float
-    activity_level:int 
+    EmailStr: str =Field(max_length=255)
+    first_name: str =Field(max_length=255)
+    last_name: str = Field(max_length=255)
+    phone_number: str = Field(max_length=15)
+    age:int = Field(max_length=3)
+    weight:int = Field(max_length=3)
+    gender:int = Field(max_length=10)
+    height:float = Field(max_length=3)
+    activity_level:int = Field(max_length=1)
     created_at: str = now
-    weight:int
-    height:float
-    activity_level:int 
+    weight:int = Field(max_length=3)
+    height:float= Field(max_length=255)
+    activity_level:int = Field(max_length=255)
     caregiver_id: Optional[uuid.UUID] = Field(foreign_key="caregiver.id")
-   
 
+   
 
 
   
