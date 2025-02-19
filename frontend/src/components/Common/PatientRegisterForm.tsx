@@ -34,11 +34,60 @@ import {
   redirect,
 } from "@tanstack/react-router";
 import { useToast } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { type SubmitHandler, useForm } from "react-hook-form"
+
+import { type ApiError, type PatientCreate, PatientsService as PatientService } from "../../client"
+import useCustomToast from "../../hooks/useCustomToast"
+import { handleError } from "../../utils"
+
+interface AddPatientProps {
+  isOpen: boolean
+  onClose: () => void
+}
 
 
+const PatientRegisterForm = ({ isOpen, onClose }: AddPatientProps) => {
+  const queryClient = useQueryClient()
+  const showToast = useCustomToast()
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<PatientCreate>({
+    mode: "onBlur",
+    criteriaMode: "all",
+    defaultValues: {
+      first_name:"",
+      last_name:"",
+      email: "",
+      about: "",
+      phon_number:"",
+      gender: "",
+      age: 0,
+    },
+  })
 
+  const mutation = useMutation({
+    mutationFn: (data: PatientCreate) =>
+      PatientService.createPatient({ requestBody: data }),
+    onSuccess: () => {
+      showToast("Success!", "Patient created successfully.", "success")
+      reset()
+      onClose()
+    },
+    onError: (err: ApiError) => {
+      handleError(err, showToast)
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["Patients"] })
+    },
+  })
 
-export default function PatientRegisterForm() {
+  const onSubmit: SubmitHandler<PatientCreate> = (data) => {
+    mutation.mutate(data)
+  }
   const toast = useToast();
   const [step, setStep] = useState(1);
   const [progress, setProgress] = useState(50.50);
@@ -75,19 +124,23 @@ export default function PatientRegisterForm() {
 const Form1 = () => {
   
   return (
-    <> <FormControl isInvalid={isFormInvalid()} mr="5%">
+    <> <FormControl isRequired isInvalid={isFormInvalid()} mr="5%">
       <Heading w="100%" textAlign={"center"} fontFamily={"cursive"} mb="2%">
         Register Patient{" "}
       </Heading>
       <Flex>
        
-          <FormLabel htmlFor="first-name" fontWeight={"normal"}>
+          <FormLabel htmlFor="first_name" fontWeight={"normal"}>
             First name
           </FormLabel>
           <Input
+           {...register("first_name", {
+            required: "first name is required.",
+          })}
+          
             key={"tahat"}
             value={formData.firstName}
-            id="first-name"
+            id="first_name"
             autoFocus={formData.firstNameAutoFocus}
             onChange={(e) => {
               e.preventDefault();
@@ -101,11 +154,16 @@ const Form1 = () => {
             }}
             placeholder="First name"
           />
-    
-          <FormLabel htmlFor="last-name" fontWeight={"normal"}>
+             {errors.first_name && (
+                <FormErrorMessage>{errors.first_name.message}</FormErrorMessage>
+              )}
+          <FormLabel htmlFor="last_name" fontWeight={"normal"}>
             Last name
           </FormLabel>
           <Input
+          {...register("last_name", {
+            required: "Title is required.",
+          })}
             id="last-name"
             placeholder="Last name"
             value={formData.lastName}
@@ -119,7 +177,11 @@ const Form1 = () => {
                 firstNameAutoFocus: true,
               });
             }}
+            
           />
+          {errors.last_name && (
+                <FormErrorMessage>{errors.last_name.message}</FormErrorMessage>
+              )}
         
       </Flex>
      
@@ -127,6 +189,9 @@ const Form1 = () => {
           Email address
         </FormLabel>
         <Input
+        {...register("email", {
+          required: "email is required.",
+        })}
           id="email"
           type="email"
           placeholder="Email address"
@@ -142,11 +207,19 @@ const Form1 = () => {
             });
           }}
         />
-      
-        <FormLabel htmlFor="phone" fontWeight={"normal"}>
+        {errors.email && (
+                <FormErrorMessage>{errors.email.message}</FormErrorMessage>
+              )}
+        <FormLabel htmlFor="phon_number" fontWeight={"normal"}>
           Phone Number
         </FormLabel>
-        <Input placeholder="Phone Number" id="phone" type="phone" 
+        <Input 
+            placeholder="Phone Number" 
+            id="phone" 
+            type="phone" 
+            {...register("phon_number", {
+              required: "Title is required.",
+            })}
             value={formData.phoneNumber} 
             autoFocus={formData.phoneNumberAutoFocus}
             onChange={(e) => {
@@ -160,6 +233,9 @@ const Form1 = () => {
                 emailAutoFocus: false,
               });
             }} /> 
+            {errors.phon_number && (
+                <FormErrorMessage>{errors.phon_number.message}</FormErrorMessage>
+              )}
         <FormErrorMessage>please check that all fields are valid</FormErrorMessage>
       </FormControl>
     
@@ -174,9 +250,9 @@ const Form2 = () => {
         Patient Intake
       </Heading>
       <Flex>
-        <FormControl mr={"5%"} as={GridItem} colSpan={[6, 3]}>
+        <FormControl isRequired mr={"5%"} as={GridItem} colSpan={[6, 3]}>
           <FormLabel
-            htmlFor="country"
+            htmlFor="gender"
             fontSize="sm"
             fontWeight="md"
             color="gray.700"
@@ -213,6 +289,9 @@ const Form2 = () => {
             <option>Female</option>
             <option>Male</option>
           </Select>
+          {errors.gender && (
+                <FormErrorMessage>{errors.gender.message}</FormErrorMessage>
+              )}
         </FormControl>
         <FormControl as={GridItem} colSpan={[6, 3, null, 2]}>
           <FormLabel
@@ -244,6 +323,9 @@ const Form2 = () => {
               <NumberDecrementStepper />
             </NumberInputStepper>
           </NumberInput>
+          {errors.title && (
+                <FormErrorMessage>{errors.first_name?.message}</FormErrorMessage>
+              )}
         </FormControl>
       </Flex>
 
@@ -278,6 +360,9 @@ const Form2 = () => {
             });}}
         />
         <FormHelperText>Brief description of your patient.</FormHelperText>
+        {errors.title && (
+                <FormErrorMessage>{errors.first_name?.message}</FormErrorMessage>
+              )}
       </FormControl>
     </>
   );
@@ -369,3 +454,4 @@ const Form2 = () => {
     </>
   );
 }
+ export default PatientRegisterForm

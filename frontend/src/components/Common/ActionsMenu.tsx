@@ -11,7 +11,7 @@ import { FiEdit, FiTrash } from "react-icons/fi"
 
 import type { PatientPublic, UserPublic } from "../../client"
 import EditUser from "../Admin/EditUser"
-import EditPatient from "../Items/EditItem"
+import EditPatient from "../Patient/EditPatient"
 import Delete from "./DeleteAlert"
 
 interface ActionsMenuProps {

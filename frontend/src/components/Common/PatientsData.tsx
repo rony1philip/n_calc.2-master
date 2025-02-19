@@ -17,7 +17,7 @@ import {
   import { PatientsService } from "../../client"
   import ActionsMenu from "../../components/Common/ActionsMenu"
   import Navbar from "../../components/Common/Navbar"
-  import AddPatient from "../../components/Items/AddItem"
+  import AddPatient from "../Patient/AddIPatient.tsx"
   import { PaginationFooter } from "../../components/Common/PaginationFooter.tsx"
   
   const patientsSearchSchema = z.object({
@@ -84,11 +84,10 @@ import {
               <Tbody>
                 {Patients?.data.map((patient) => (
                   <Tr key={patient.id} opacity={isPlaceholderData ? 0.5 : 1}>
-                    <Td>{patient.id}</Td>
-                    <Td isTruncated maxWidth="150px">{patient.title}</Td>
-                    <Td color={!patient.description ? "ui.dim" : "inherit"} isTruncated maxWidth="150px">
-                      {patient.description || "N/A"}
-                    </Td>
+                    <Td>{patient.first_name} {patient.last_name}</Td>
+                    <Td isTruncated maxWidth="150px">{patient.phon_number}</Td>
+                    <Td  isTruncated maxWidth="150px">
+                      {patient.email || "N/A"}</Td>
                     <Td>
                       <ActionsMenu type={"Patient"} value={patient} />
                     </Td>

@@ -14,6 +14,19 @@ export type HTTPValidationError = {
 export type PatientCreate = {
   title: string
   description?: string | null
+  id: string
+  owner_id: string
+  about: string
+  email: string
+  first_name: string
+  last_name: string
+  phon_number: string
+  age: number
+  weight: number
+  gender: string
+  height: number
+  activity_level:number
+  created_at: number
 }
 
 export type PatientPublic = {

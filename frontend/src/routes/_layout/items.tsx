@@ -18,7 +18,7 @@ import { z } from "zod"
 import { PatientsService } from "../../client"
 import ActionsMenu from "../../components/Common/ActionsMenu"
 import Navbar from "../../components/Common/Navbar"
-import AddPatient from "../../components/Items/AddItem"
+import AddPatient from "../../components/Patient/AddIPatient.tsx"
 import { PaginationFooter } from "../../components/Common/PaginationFooter.tsx"
 
 const patientsSearchSchema = z.object({
